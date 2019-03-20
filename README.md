@@ -8,4 +8,4 @@ See the [Unity client](https://github.com/tiagodavi70/Web-Gen-Viz/tree/master/un
 * Needs the architecture image
 
 # Credits and Contact
-* MSc. Tiago Davi Oliveira de Araújo [email](tiagodavi70@gmail.com)
+* MSc. Tiago Davi Oliveira de Araújo - [email](tiagodavi70@gmail.com)
