@@ -28,9 +28,9 @@ http://localhost:3000/chartgen.html?value=$VALUES&key=$KEYS&category=$CATEGORIES
 * _$VALUES_ = array of values CSV like e.g. 1,2,4,5
 * _$KEYS_ = array of labels CSV like e.g. orange,pear,kiwi
 * _$CATEGORIES_ = array of categories CSV like e.g. a,b
-* _$CHARTTYPE_ = type of chart (names [below](#/Examples)) e.g. barchartvertical
+* _$CHARTTYPE_ = type of chart (names [below](#Examples)) e.g. barchartvertical
 
-This structure can be different from one chart to another, see [below](#/Examples)
+This structure can be different from one chart to another, see [below](#Examples)
 
 * Example  
 ``` bash
