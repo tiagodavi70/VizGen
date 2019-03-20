@@ -1,0 +1,82 @@
+{
+  "$schema": "https://vega.github.io/schema/vega/v5.json",
+  "width": 900,
+  "height": 465,
+  "padding": 5,
+
+  "data": [
+    {
+      "name": "table",
+      "values": "",
+      "transform": [
+        {
+          "type": "stack",
+          "groupby": ["key"],
+          "sort": {"field": "category"},
+          "field": "value"
+        }
+      ]
+    }
+  ],
+
+  "scales": [
+    {
+      "name": "key",
+      "type": "point",
+      "range": "width",
+      "domain": {"data": "table", "field": "key"}
+    },
+    {
+      "name": "value",
+      "type": "linear",
+      "range": "height",
+      "nice": true, "zero": true,
+      "domain": {"data": "table", "field": "value"}
+    },
+    {
+      "name": "color",
+      "type": "ordinal",
+      "range": "category",
+      "domain": {"data": "table", "field": "category"}
+    }
+  ],
+
+  "axes": [
+    {"orient": "bottom", "scale": "key", "zindex": 1},
+    {"orient": "left", "scale": "value", "zindex": 1}
+  ],
+
+  "marks": [
+    {
+      "type": "group",
+      "from": {
+        "facet": {
+          "name": "series",
+          "data": "table",
+          "groupby": "category"
+        }
+      },
+      "marks": [
+        {
+          "type": "area",
+          "from": {"data": "series"},
+          "encode": {
+            "enter": {
+              "interpolate": {"value": "monotone"},
+              "x": {"scale": "key", "field": "key"},
+              "y": {"scale": "value", "field": "y0"},
+              "y2": {"scale": "value", "field": "y1"},
+              "fill": {"scale": "color", "field": "category"}
+            },
+            "update": {
+              "fillOpacity": {"value": 1}
+            },
+            "hover": {
+              "fillOpacity": {"value": 0.5}
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

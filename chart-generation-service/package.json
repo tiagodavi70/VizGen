@@ -1,0 +1,27 @@
+{
+  "name": "chart-gen-service",
+  "version": "1.0.0",
+  "description": "Web Service to serve SVG charts",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tiagodavi70/Web-Gen-Viz.git"
+  },
+  "author": "Tiago Davi Oliveira de Araújo",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tiagodavi70/Web-Gen-Viz/issues"
+  },
+  "homepage": "https://github.com/tiagodavi70/Web-Gen-Viz#readme",
+  "dependencies": {
+    "canvas": "^2.4.0",
+    "d3": "^5.9.2",
+    "express": "^4.16.4",
+    "underscore": "^1.9.1",
+    "vega": "^5.3.0"
+  }
+}
