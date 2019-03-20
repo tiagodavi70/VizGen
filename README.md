@@ -1,6 +1,6 @@
 # Web-Gen-Viz
 Generate charts on the go, run the server and connect for simple chart construction.
-See the [Unity client](https://github.com/tiagodavi70/Web-Gen-Viz/unity-client/README.md) and the [web service](https://github.com/tiagodavi70/Web-Gen-Viz/chart-generation-service/README.md) for instructions on instalation and usage.
+See the [Unity client](https://github.com/tiagodavi70/Web-Gen-Viz/tree/master/unity-client) and the [web service](https://github.com/tiagodavi70/Web-Gen-Viz/tree/master/chart-generation-service/) for instructions on instalation and usage.
 
 
 # TODO
