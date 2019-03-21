@@ -6,6 +6,7 @@ See the [Unity client](https://github.com/tiagodavi70/Web-Gen-Viz/tree/master/un
 # TODO
 * Put some images
 * Needs the architecture image
+* step by step video on clean machine
 
 # Credits and Contact
 * MSc. Tiago Davi Oliveira de Araújo - [email](tiagodavi70@gmail.com)

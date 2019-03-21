@@ -32,7 +32,7 @@ http://localhost:3000/chartgen.html?value=$VALUES&key=$KEYS&category=$CATEGORIES
 
 This structure can be different from one chart to another, see [below](#Examples)
 
-* Example  
+* Request example  
 ``` bash
 http://localhost:3000/chartgen.html?value=1,2,3,4&key=orange,pear,orange,pear&category=0,0,1,1&chart=areachart
 ```
@@ -51,7 +51,7 @@ chartgen.generateChart().then((base64string) => {
 }).catch((err) => {console.error(err);});
 ```
 
-# Data and Visualization supported
+# Data and Visualizations supported
 
 #### Bar Chart - Vertical
 * **barchartvertical**
@@ -87,3 +87,4 @@ chartgen.generateChart().then((base64string) => {
 * return of json for interaction on client
 * functions for colors, samples, ranges of values
 * filter logic
+* more request examples

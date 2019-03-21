@@ -7,6 +7,8 @@ Import the _.unitypackage_ of this directory in your project. The _Vis_ prefab h
 
 
 # TODO
-* Put and editor image
+* usage examples
+* pictures of usage examples
+* Put and unity editor image
 * Unity architecture image
 * create a big, good example scene

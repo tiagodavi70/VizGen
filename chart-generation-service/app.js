@@ -8,7 +8,8 @@ const web_port = 3000;
 function cleangeturl(req){
     let params = req.query;
     for ( let key of ["value","key","category"] )
-        params[key] = params[key].split(",");
+        if (params[key])
+            params[key] = params[key].split(",");
     return params;
 }
 
