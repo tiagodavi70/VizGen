@@ -19,7 +19,7 @@
         delete data.chart;
         let ks = _.keys(data);
         let d = [];
-        console.log(data);
+
         if (ks.length === 2) { // case of key-value pair, converts to an array of key-value objects
             for (let i = 0; i < data["value"].length; i++)
                 d.push({"key": data["key"][i], "value": +data["value"][i]});

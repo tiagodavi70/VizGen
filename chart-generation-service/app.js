@@ -32,7 +32,8 @@ web_server.get('*', function (req, res) {
 });
 
 web_server.listen(web_port, function () {
-    console.log('Web Server listening on port: ' + web_port);
+    console.log('Web Server for chart Recognition started listening on port: ' + web_port);
+    console.log();
 });
 
 
