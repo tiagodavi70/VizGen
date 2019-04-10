@@ -6,7 +6,8 @@
         this.d3 = require('d3');
         this._ = require('underscore');
         this.vega = require("vega");
-        this.started = false;
+        this.vl = require("vega-lite");
+        this.fs = require("fs");
     }
 
 
@@ -15,27 +16,24 @@
 
     }
 
-    function formatdata(data){
-        delete data.chart;
-        let ks = _.keys(data);
-        let d = [];
+    function formatdata(datavector) {
+        let dataformatted = [];
 
-        if (ks.length === 2) { // case of key-value pair, converts to an array of key-value objects
-            for (let i = 0; i < data["value"].length; i++)
-                d.push({"key": data["key"][i], "value": +data["value"][i]});
-        } else if (ks.length === 3) { // case of key-value-category tuplet, converts to an array of key-value-category objects
-            for (let i = 0; i < data["value"].length; i++)
-                d.push({"key": data["key"][i], "value": +data["value"][i], "category": data["category"][i]});
-        }
-
-        return d;
+        for (let i = 0 ; i < datavector["x"].length ; i++)
+            dataformatted.push({"x":datavector["x"][i],
+                                "y":datavector["y"] ? datavector["y"][i] : 0,
+                                "z":datavector["z"] ? datavector["z"][i] : 0,
+                                "w":datavector["w"] ? datavector["w"][i] : 0});
+        return dataformatted;
     }
+
 
     class ChartGenerator {
 
-        constructor(chartType, dataExternal, selector){
-            this.data = formatdata(dataExternal);
-            this.chartType = chartType;
+        constructor(dataExternal, selector){
+            this.chartType = dataExternal.charttype;
+            this.data = formatdata(dataExternal.data);
+            this.settings = dataExternal;
             this.selector = selector;
             this.path = isNodeJS ? "./html/vega/" : "./vega";
 
@@ -64,23 +62,43 @@
             }
         };
 
+        // call this function to generate the charts
         async generateChart() {
-            let dataraw = await vega.loader()
-                .load(this.path + this.chartType + ".json");
+            console.log("Required: " + this.chartType);
 
-            let spec = JSON.parse(dataraw); // retrieve spec from buffer
-            spec.data[0].values = this.data;
+            let vlspec = "";
+            let spec = "";
 
-            return this.render(spec); // returns svg for node, a vega.view for web
+            let specfilepath = this.path + this.chartType + ".json";
+            if (["scatterplot"].includes(this.chartType)){ // all vega lite specs goes here
+                if (isNodeJS) {
+                    vlspec = JSON.parse(fs.readFileSync(specfilepath)
+                        .toString());
+                    spec = vl.compile(vlspec).spec;
+                }
+            } else {
+                spec = await vega.loader().load(specfilepath);
+                spec = JSON.parse(spec);
+            }
 
+            // change
+            if (spec.data[0])
+                spec.data[0].values = this.data;
+            else
+                spec.data.values = this.data; // data - common to all
+
+            if (this.chartType === 'barchartvertical') {
+
+                if (this.settings.colors) {
+                    spec.marks[0].encode.update.fill.value = this.settings.colors;
+                }
+            }
+
+            return this.render(spec); // returns svg or base64 string for node, vega.view for web
         };
 
         static debug() {
             return 'debug ';
-        }
-
-        static formatdata(data_array) {
-            return data_array.map((d,i) => { return {"key" : i, "value":d} });
         }
     }
 

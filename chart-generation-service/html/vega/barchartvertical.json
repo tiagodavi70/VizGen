@@ -28,14 +28,14 @@
     {
       "name": "xscale",
       "type": "band",
-      "domain": {"data": "table", "field": "key"},
+      "domain": {"data": "table", "field": "x"},
       "range": "width",
       "padding": 0.05,
       "round": true
     },
     {
       "name": "yscale",
-      "domain": {"data": "table", "field": "value"},
+      "domain": {"data": "table", "field": "y"},
       "nice": true,
       "range": "height"
     }
@@ -52,9 +52,9 @@
       "from": {"data":"table"},
       "encode": {
         "enter": {
-          "x": {"scale": "xscale", "field": "key"},
+          "x": {"scale": "xscale", "field": "x"},
           "width": {"scale": "xscale", "band": 1},
-          "y": {"scale": "yscale", "field": "value"},
+          "y": {"scale": "yscale", "field": "y"},
           "y2": {"scale": "yscale", "value": 0}
         },
         "update": {

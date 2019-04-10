@@ -1,5 +1,5 @@
 {
-  "$schema": "https://vega.github.io/schema/vega/v5.json",
+  "$schema": "./schema.json",
   "width": 900,
   "height": 465,
   "padding": 5,
@@ -8,12 +8,14 @@
     {
       "name": "table",
       "values": "",
+      "source":"",
+      "url":"",
       "transform": [
         {
           "type": "stack",
-          "groupby": ["key"],
-          "sort": {"field": "category"},
-          "field": "value"
+          "groupby": ["x"],
+          "sort": {"field": "z"},
+          "field": "y"
         }
       ]
     }
@@ -24,20 +26,20 @@
       "name": "key",
       "type": "point",
       "range": "width",
-      "domain": {"data": "table", "field": "key"}
+      "domain": {"data": "table", "field": "x"}
     },
     {
       "name": "value",
       "type": "linear",
       "range": "height",
       "nice": true, "zero": true,
-      "domain": {"data": "table", "field": "value"}
+      "domain": {"data": "table", "field": "y"}
     },
     {
       "name": "color",
       "type": "ordinal",
       "range": "category",
-      "domain": {"data": "table", "field": "category"}
+      "domain": {"data": "table", "field": "z"}
     }
   ],
 
@@ -53,7 +55,7 @@
         "facet": {
           "name": "series",
           "data": "table",
-          "groupby": "category"
+          "groupby": "z"
         }
       },
       "marks": [
@@ -63,10 +65,10 @@
           "encode": {
             "enter": {
               "interpolate": {"value": "monotone"},
-              "x": {"scale": "key", "field": "key"},
+              "x": {"scale": "key", "field": "x"},
               "y": {"scale": "value", "field": "y0"},
               "y2": {"scale": "value", "field": "y1"},
-              "fill": {"scale": "color", "field": "category"}
+              "fill": {"scale": "color", "field": "z"}
             },
             "update": {
               "fillOpacity": {"value": 1}

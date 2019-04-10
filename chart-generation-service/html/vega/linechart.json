@@ -1,5 +1,5 @@
 {
-  "$schema": "https://vega.github.io/schema/vega/v5.json",
+  "$schema": "./schema.json",
   "width": 900,
   "height": 465,
   "padding": 5,
@@ -7,7 +7,9 @@
   "data": [
     {
       "name": "table",
-      "values": ""
+      "values": "",
+      "source":"",
+      "url":""
     }
   ],
 
@@ -16,7 +18,7 @@
       "name": "key",
       "type": "point",
       "range": "width",
-      "domain": {"data": "table", "field": "key"}
+      "domain": {"data": "table", "field": "x"}
     },
     {
       "name": "value",
@@ -24,13 +26,13 @@
       "range": "height",
       "nice": true,
       "zero": true,
-      "domain": {"data": "table", "field": "value"}
+      "domain": {"data": "table", "field": "y"}
     },
     {
       "name": "color",
       "type": "ordinal",
       "range": "category",
-      "domain": {"data": "table", "field": "category"}
+      "domain": {"data": "table", "field": "z"}
     }
   ],
 
@@ -46,7 +48,7 @@
         "facet": {
           "name": "series",
           "data": "table",
-          "groupby": "category"
+          "groupby": "z"
         }
       },
       "marks": [
@@ -55,9 +57,9 @@
           "from": {"data": "series"},
           "encode": {
             "enter": {
-              "x": {"scale": "key", "field": "key"},
-              "y": {"scale": "value", "field": "value"},
-              "stroke": {"scale": "color", "field": "category"},
+              "x": {"scale": "key", "field": "x"},
+              "y": {"scale": "value", "field": "y"},
+              "stroke": {"scale": "color", "field": "z"},
               "strokeWidth": {"value": 2}
             },
             "update": {

@@ -1,5 +1,5 @@
 {
-  "$schema": "https://vega.github.io/schema/vega/v5.json",
+  "$schema": "./schema.json",
   "width": 200,
   "height": 200,
   "autosize": "none",
@@ -9,10 +9,12 @@
     {
       "name": "table",
       "values": "",
+      "source":"",
+      "url":"",
       "transform": [
         {
           "type": "pie",
-          "field": "value",
+          "field": "y",
           "startAngle": {"signal": "0"},
           "endAngle": {"signal": "6.29"},
           "sort": {"signal": "false"}
@@ -25,7 +27,7 @@
     {
       "name": "color",
       "type": "ordinal",
-      "domain": {"data": "table", "field": "key"},
+      "domain": {"data": "table", "field": "x"},
       "range": {"scheme": "category20"}
     }
   ],
@@ -36,7 +38,7 @@
       "from": {"data": "table"},
       "encode": {
         "enter": {
-          "fill": {"scale": "color", "field": "key"},
+          "fill": {"scale": "color", "field": "x"},
           "x": {"signal": "width / 2"},
           "y": {"signal": "height / 2"}
         },

@@ -1,7 +1,7 @@
 # Chart Generation Service
 
-Web service to generate charts in image and SVG formats. 
-It works in the browser over the DOM and in the server over an URL GET format layer.
+Web service to generate charts in base64 PNG string image and SVG formats.
+It works in the browser over the DOM and in the server with an URL GET format layer.
 
 ## Usage
 Two modes are available for this module, one in the browser, available with a _script_ tag and one with a NodeJS server.
@@ -10,7 +10,7 @@ Two modes are available for this module, one in the browser, available with a _s
 
 * Steps
   * Install NodeJS, make sure _node_ and _npm_ are on PATH
-  * Install dependecies, running the below command on this directory (./Web-Gen-Viz/chart-generation-service)
+  * Install dependencies, running the below command on this directory (./Web-Gen-Viz/chart-generation-service)
   ``` bash
   npm install
   ```
@@ -21,20 +21,20 @@ Two modes are available for this module, one in the browser, available with a _s
 
 ### Requests
 
-The interface of requests is done by the URL, on GET requisitions. The structure is as follows:  
-```bash 
-http://localhost:3000/chartgen.html?value=$VALUES&key=$KEYS&category=$CATEGORIES&chart=$CHARTTYPE
+The interface of requests is done by the URL, on GET requisitions. The basic structure is as follows:  
+```bash
+http://localhost:3000/chartgen.html?x=$KEYS&y=$VALUES&z=$CATEGORIES&chart=$CHARTTYPE
 ```
 * _$VALUES_ = array of values CSV like e.g. 1,2,4,5
 * _$KEYS_ = array of labels CSV like e.g. orange,pear,kiwi
 * _$CATEGORIES_ = array of categories CSV like e.g. a,b
-* _$CHARTTYPE_ = type of chart (names [below](#Examples)) e.g. barchartvertical
+* _$CHARTTYPE_ = type of chart (types [below](#Examples)) e.g. linechart
 
 This structure can be different from one chart to another, see [below](#Examples)
 
 * Request example  
 ``` bash
-http://localhost:3000/chartgen.html?value=1,2,3,4&key=orange,pear,orange,pear&category=0,0,1,1&chart=areachart
+http://localhost:3000/chartgen.html?x=orange,pear,orange,pear&y=1,2,3,4&z=0,0,1,1&chart=areachart
 ```
 
 ## Examples
@@ -43,48 +43,55 @@ http://localhost:3000/chartgen.html?value=1,2,3,4&key=orange,pear,orange,pear&ca
 ``` javascript
 const ChartGenerator = require('./lib/chartgen');
 
-let data = {"key": [1,2], "value": ["orange","pear"]} // will be formatted inside generatechart
-let chartype = "areachart"
-let chartgen = new ChartGenerator(chartype,data); // null third argument returns base64 string, "svg" on third argument returns svg string
+let data = {"charttype":"areachart", "x": ["orange","pear"], "y": [1,2]} // will be formatted inside generatechart
+let chartgen = new ChartGenerator(data); // null second argument returns base64 string, "svg" on third argument returns svg string
 chartgen.generateChart().then((base64string) => {
     res.send(base64string);
 }).catch((err) => {console.error(err);});
 ```
 
-# Data and Visualizations supported
+# Visualizations, data formats and settings supported
 
 #### Bar Chart - Vertical
 * **barchartvertical**
-* key value pair
+* x y pair
 
 #### Pie Chart
 * **piechart**
-* key value pair
+* x y pair
 
 #### Line Chart
 * **linechart**
-* key value pair  
-* key value category tuplet
+* x y pair  
+* x y z tuplet
 
 #### Area Chart
 * **areachart**
-* key value pair  
-* key value category tuplet
+* x y pair  
+* x y z tuplet
 
-## Internal data format
-* Two dimension, array of key value pair
-``` javascript 
-{"key" : key, "value": value}
-```
+# Full list with types of all parameters:
+* dimensions
+  1. x - CSV numbers or categories list
+  2. y - CSV numbers list
+  3. z - CSV numbers or categories list
+  4. w - CSV numbers or categories list
 
-* Three dimension, array of key-value-category tuplet
-``` javascript 
-{"key" : key, "value": value, "category": category}
-```
+
+* colors - HTML color names or Hex list
+
+* showlabels - true or false (default false, bar chart)
+* legends - true or false (default false)
+* sort - true or false (default false, pie chart)
+
+* interpolation - single categoric (line and area charts)
+
+* inner - single number ranged from 0 -> (height-(height/10)) (default 0, pie chart)
+* padding -single number ranged from 0 -> 1 (default 0, pie chart)
 
 # TODO
 * POST requests
 * return of json for interaction on client
-* functions for colors, samples, ranges of values
-* filter logic
+* filter
 * more request examples
+* html usage example
