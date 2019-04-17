@@ -15,16 +15,22 @@ public class ChartGenerator : MonoBehaviour {
         BarChartVertical,
         LineChart,
         PieChart,
-        AreaChart
+        AreaChart,
+        Scatterplot
     }
 
+    private string title = "";
     private ChartType Charttype = ChartType.BarChartVertical;
+    private string Xlabel = "";
     private string X = "pear,orange,pineapple,blueberry";
+    private string Ylabel = "";
     public string Y = "1,2,3,4";
+    private string Zlabel = "";
     public string Z = "america,america,europe,europe";
+    private string Wlabel = "";
     public string W = "";
 
-    public Color Colors = new Color(70,130,180);
+    public Color[] Colors = { new Color(70, 130, 180) };
     public bool ShowLabels;
     public bool Legends;
     public bool Sort;
@@ -32,44 +38,38 @@ public class ChartGenerator : MonoBehaviour {
     public float Inner;
     public float Padding;
 
-    public ChartType charttype
-    {
-        get
-        {return Charttype;}
-        set
-        {Charttype = value;if (autoupdate) getchart();}
-    }
-    public string x
-    {
-        get
-        {return X;}
-        set
-        {X = value; if (autoupdate)getchart();}
-    }
-    public string y
-    {
-        get
-        { return Y;}
-        set
-        { Y = value; if (autoupdate) getchart(); }
-    }
-    public string z
-    {
-        get
-        { return Z;}
-        set
-        { Z = value; if (autoupdate) getchart(); }
-    }
+    public ChartType charttype {
+        get {return Charttype;}
+        set {Charttype = value;if (autoupdate) getchart();}}
+    public string xlabel {
+        get { return Xlabel; }
+        set { Xlabel = value; if (autoupdate) getchart(); }}
+    public string x {
+        get {return X;}
+        set {X = value; if (autoupdate)getchart();}}
+    public string ylabel{
+        get { return Ylabel; }
+        set { Ylabel = value; if (autoupdate) getchart(); }}
+    public string y {
+        get { return Y;}
+        set { Y = value; if (autoupdate) getchart(); }}
+    public string zlabel {
+        get { return Zlabel; }
+        set { Zlabel = value; if (autoupdate) getchart(); }}
+    public string z {
+        get { return Z;}
+        set { Z = value; if (autoupdate) getchart(); }}
+    public string wlabel {
+        get { return Wlabel; }
+        set { Wlabel = value; if (autoupdate) getchart(); }}
+    public string w {
+        get { return W; }
+        set { W = value; if (autoupdate) getchart(); }}
+    public Color[] colors {
+        get { return Colors;}
+        set { Colors = value; if (autoupdate) getchart(); }}
 
-    public Color colors
-    {
-        get
-        { return Colors;}
-        set
-        { Colors = value; if (autoupdate) getchart(); }
-    }
 
-    // Use this for initialization
     void Start() {
         if (autostart) getchart(); 
     }
@@ -79,10 +79,28 @@ public class ChartGenerator : MonoBehaviour {
     {
         if (verifyparameters()) {
             string url = "http://localhost:3000/chartgen.html?x=" + x + "&y=" + y + "&chart=" + Charttype.ToString().ToLower();
-            url += "&colors=rgb(" + colors.r + "," + colors.g + "," + colors.b + ")";
-            Debug.Log("requisition with: " + url);
+
+            if (checkmaxdimensions() > 2)
+                url += "&z=" + z;
+            if (checkmaxdimensions() > 3)
+                url += "&w=" + w;
+
+            url += "&colors=";
+            String[] colorholder = new String[colors.Length];
+            for (int i = 0; i < colors.Length; i++)
+            {
+                colorholder[i] = "rgb(" + colors[i].r + "," + colors[i].g + "," + colors[i].b + ")";
+            }
+            
+            url += String.Join(";", colorholder);
+            Debug.Log("requisition: " + url);
             StartCoroutine(GetRequest(url));
         }
+    }
+
+    public void getchartfromurl(String url)
+    {
+        StartCoroutine(GetRequest(url));
     }
 
     // generate sprite based on base64 string that came from server
@@ -139,6 +157,9 @@ public class ChartGenerator : MonoBehaviour {
                 break;
             case ChartType.AreaChart:
                 dim = 3;
+                break;
+            case ChartType.Scatterplot:
+                dim = 4;
                 break;
         }
         return dim;

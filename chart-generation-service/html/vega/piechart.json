@@ -2,9 +2,7 @@
   "$schema": "./schema.json",
   "width": 200,
   "height": 200,
-  "autosize": "none",
-
-
+  "title":"",
   "data": [
     {
       "name": "table",
@@ -29,6 +27,22 @@
       "type": "ordinal",
       "domain": {"data": "table", "field": "x"},
       "range": {"scheme": "category20"}
+    }
+  ],
+
+  "legends": [
+    {
+      "stroke": "color",
+      "title": "",
+      "padding": 4,
+      "encode": {
+        "symbols": {
+          "enter": {
+            "strokeWidth": {"value": 2},
+            "size": {"value": 10}
+          }
+        }
+      }
     }
   ],
 

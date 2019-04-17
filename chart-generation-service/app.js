@@ -22,7 +22,7 @@ function cleangeturl(req){
 
     // specific configurations - boolean values
     // value labels on visual mark
-    for (let key of ["showlabels", "legends", "sort"] )
+    for (let key of ["sort"] )
         //if (params[key])
             d[key] = params[key] === true;
 

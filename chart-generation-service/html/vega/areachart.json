@@ -1,84 +1,13 @@
 {
-  "$schema": "./schema.json",
-  "width": 900,
-  "height": 465,
-  "padding": 5,
-
-  "data": [
-    {
-      "name": "table",
-      "values": "",
-      "source":"",
-      "url":"",
-      "transform": [
-        {
-          "type": "stack",
-          "groupby": ["x"],
-          "sort": {"field": "z"},
-          "field": "y"
-        }
-      ]
-    }
-  ],
-
-  "scales": [
-    {
-      "name": "key",
-      "type": "point",
-      "range": "width",
-      "domain": {"data": "table", "field": "x"}
-    },
-    {
-      "name": "value",
-      "type": "linear",
-      "range": "height",
-      "nice": true, "zero": true,
-      "domain": {"data": "table", "field": "y"}
-    },
-    {
-      "name": "color",
-      "type": "ordinal",
-      "range": "category",
-      "domain": {"data": "table", "field": "z"}
-    }
-  ],
-
-  "axes": [
-    {"orient": "bottom", "scale": "key", "zindex": 1},
-    {"orient": "left", "scale": "value", "zindex": 1}
-  ],
-
-  "marks": [
-    {
-      "type": "group",
-      "from": {
-        "facet": {
-          "name": "series",
-          "data": "table",
-          "groupby": "z"
-        }
-      },
-      "marks": [
-        {
-          "type": "area",
-          "from": {"data": "series"},
-          "encode": {
-            "enter": {
-              "interpolate": {"value": "monotone"},
-              "x": {"scale": "key", "field": "x"},
-              "y": {"scale": "value", "field": "y0"},
-              "y2": {"scale": "value", "field": "y1"},
-              "fill": {"scale": "color", "field": "z"}
-            },
-            "update": {
-              "fillOpacity": {"value": 1}
-            },
-            "hover": {
-              "fillOpacity": {"value": 0.5}
-            }
-          }
-        }
-      ]
-    }
-  ]
+  "$schema": "https://vega.github.io/schema/vega-lite/v3.json",
+  "title":"",
+  "data": {
+    "values": []
+  },
+  "mark":{"type":"area"},
+  "encoding": {
+    "x": {"field": "x", "type": "nominal","title":"","scale": {"rangeStep": null}},
+    "y": {"field": "y", "type": "quantitative","title":""},
+    "color":{"field": "z", "type": "nominal","title":""}
+  }
 }

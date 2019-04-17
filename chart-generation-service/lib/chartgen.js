@@ -66,33 +66,50 @@
         async generateChart() {
             console.log("Required: " + this.chartType);
 
+            let vllist = ["barchartvertical","linechart","scatterplot","areachart"];
             let vlspec = "";
-            let spec = "";
+            let spec = {};
 
             let specfilepath = this.path + this.chartType + ".json";
-            if (["scatterplot"].includes(this.chartType)){ // all vega lite specs goes here
+            let isvlspec = vllist.includes(this.chartType);
+
+            if (isvlspec) { // all vega lite specs goes here
                 if (isNodeJS) {
                     vlspec = JSON.parse(fs.readFileSync(specfilepath)
                         .toString());
+
+                    vlspec.data.values = this.data;
+                    for (let axis of ["x","y"])
+                        if (vlspec.encoding[axis])
+                            vlspec.encoding[axis].title = this.settings[axis+"label"] ? this.settings[axis+"label"] : "";
+
+                    let vlaxis = ["color","size"];
+                    let extradim = ["z","w"];
+                    for (let i = 0 ; i < vlaxis.length ; i++)
+                        if (vlspec.encoding[vlaxis[i]])
+                            vlspec.encoding[vlaxis[i]].title = this.settings[extradim[i]+"label"] ? this.settings[extradim[i]+"label"] : "";
+
+                    if (this.settings["colors"]){
+
+                        // single color encondings
+                        if (this.chartType === "barchartvertical") {
+                            vlspec.encoding.color.value = this.settings["colors"];
+                        }
+                    }
+
                     spec = vl.compile(vlspec).spec;
                 }
             } else {
                 spec = await vega.loader().load(specfilepath);
                 spec = JSON.parse(spec);
-            }
-
-            // change
-            if (spec.data[0])
                 spec.data[0].values = this.data;
-            else
-                spec.data.values = this.data; // data - common to all
 
-            if (this.chartType === 'barchartvertical') {
+                if (this.chartType === "piechart") {
 
-                if (this.settings.colors) {
-                    spec.marks[0].encode.update.fill.value = this.settings.colors;
                 }
             }
+
+            spec.title = this.settings["title"];
 
             return this.render(spec); // returns svg or base64 string for node, vega.view for web
         };
