@@ -4,9 +4,20 @@
   "data": {
     "values": []
   },
+  "config": {
+    "background":"#FFFFFF",
+    "axis": {
+      "labelFontSize": 20,
+      "titleFontSize": 30
+    },
+    "legend": {
+      "labelFontSize": 20,
+      "titleFontSize": 30
+    }
+  },
   "mark":{"type":"area"},
   "encoding": {
-    "x": {"field": "x", "type": "nominal","title":"","scale": {"rangeStep": null}},
+    "x": {"field": "x", "type": "nominal","title":"","scale": {"rangeStep": null},"sort":null},
     "y": {"field": "y", "type": "quantitative","title":""},
     "color":{"field": "z", "type": "nominal","title":""}
   }

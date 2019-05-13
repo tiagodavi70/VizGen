@@ -10,7 +10,6 @@
         this.fs = require("fs");
     }
 
-
     // TODO: create buffer to keep all specs in memory
     function loadAllData() {
 
@@ -26,7 +25,6 @@
                                 "w":datavector["w"] ? datavector["w"][i] : 0});
         return dataformatted;
     }
-
 
     class ChartGenerator {
 
@@ -78,26 +76,26 @@
                     vlspec = JSON.parse(fs.readFileSync(specfilepath)
                         .toString());
 
+                    vlspec.title = {"text":this.settings["title"], "fontSize": 20};
                     vlspec.data.values = this.data;
                     for (let axis of ["x","y"])
                         if (vlspec.encoding[axis])
-                            vlspec.encoding[axis].title = this.settings[axis+"label"] ? this.settings[axis+"label"] : "";
+                            vlspec.encoding[axis].title = this.settings[axis+"label"];
 
                     let vlaxis = ["color","size"];
                     let extradim = ["z","w"];
                     for (let i = 0 ; i < vlaxis.length ; i++)
                         if (vlspec.encoding[vlaxis[i]])
-                            vlspec.encoding[vlaxis[i]].title = this.settings[extradim[i]+"label"] ? this.settings[extradim[i]+"label"] : "";
+                            vlspec.encoding[vlaxis[i]].title = this.settings[extradim[i]+"label"];
 
                     if (this.settings["colors"]){
-
                         // single color encondings
                         if (this.chartType === "barchartvertical") {
                             vlspec.encoding.color.value = this.settings["colors"];
                         }
                     }
-
                     spec = vl.compile(vlspec).spec;
+                    console.log(spec);
                 }
             } else {
                 spec = await vega.loader().load(specfilepath);
@@ -107,10 +105,8 @@
                 if (this.chartType === "piechart") {
 
                 }
+                spec.title = this.settings["title"];
             }
-
-            spec.title = this.settings["title"];
-
             return this.render(spec); // returns svg or base64 string for node, vega.view for web
         };
 

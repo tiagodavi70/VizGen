@@ -3,9 +3,20 @@
   "title":"",
   "description": "",
   "data": {"values": []},
+  "config": {
+    "background":"#FFFFFF",
+    "axis": {
+      "labelFontSize": 20,
+      "titleFontSize": 30
+    },
+    "legend": {
+      "labelFontSize": 20,
+      "titleFontSize": 30
+    }
+  },
   "mark": "point",
   "encoding": {
-    "x": {"field": "x", "type": "quantitative","title":""},
+    "x": {"field": "x", "type": "quantitative","title":"","sort":null},
     "y": {"field": "y", "type": "quantitative","title":""},
     "color": {"field": "z", "type": "nominal","title":""},
     "size": {"field":"w", "type":"quantitative","title":""}

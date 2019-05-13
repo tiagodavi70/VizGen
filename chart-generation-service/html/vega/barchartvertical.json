@@ -1,12 +1,23 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v3.json",
-  "title":"",
+  "title": "",
   "data": {
     "values": []
   },
+  "config": {
+    "background":"#FFFFFF",
+    "axis": {
+      "labelFontSize": 20,
+      "titleFontSize": 30
+    },
+    "legend": {
+      "labelFontSize": 20,
+      "titleFontSize": 30
+    }
+  },
   "mark":{"type":"bar"},
   "encoding": {
-    "x": {"field": "x", "type": "ordinal","title":"","scale": {"rangeStep": null}},
+    "x": {"field": "x", "type": "ordinal","title":"","scale": {"rangeStep": null},"sort":null},
     "y": {"field": "y", "type": "quantitative","title":""},
     "color":{"value":"steelblue"}
   }

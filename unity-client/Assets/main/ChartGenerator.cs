@@ -19,18 +19,28 @@ public class ChartGenerator : MonoBehaviour {
         Scatterplot
     }
 
-    private string title = "";
+    [SerializeField]
+    private string Title = "Worldwide fruits market";
+    [SerializeField]
     private ChartType Charttype = ChartType.BarChartVertical;
-    private string Xlabel = "";
+    [SerializeField]
+    private string Xlabel = "fruits";
+    [SerializeField]
     private string X = "pear,orange,pineapple,blueberry";
-    private string Ylabel = "";
-    public string Y = "1,2,3,4";
-    private string Zlabel = "";
-    public string Z = "america,america,europe,europe";
-    private string Wlabel = "";
-    public string W = "";
-
-    public Color[] Colors = { new Color(70, 130, 180) };
+    [SerializeField]
+    private string Ylabel = "qt. sold";
+    [SerializeField]
+    private string Y = "1,2,3,4";
+    [SerializeField]
+    private string Zlabel = "Continent";
+    [SerializeField]
+    private string Z = "america,america,europe,europe";
+    [SerializeField]
+    private string Wlabel = "Toxins";
+    [SerializeField]
+    private string W = "1,3,5,7";
+    [SerializeField]
+    public Color[] Colors = { new Color(70 / 255f, 130 / 255f, 180 / 255f) };
     public bool ShowLabels;
     public bool Legends;
     public bool Sort;
@@ -39,39 +49,58 @@ public class ChartGenerator : MonoBehaviour {
     public float Padding;
 
     public ChartType charttype {
-        get {return Charttype;}
-        set {Charttype = value;if (autoupdate) getchart();}}
+        get { return Charttype; }
+        set { Charttype = value; if (autoupdate) getchart(); } }
+    public string title {
+        get { return Title; }
+        set { Title = value; if (autoupdate) getchart(); } }
     public string xlabel {
         get { return Xlabel; }
-        set { Xlabel = value; if (autoupdate) getchart(); }}
+        set { Xlabel = value; if (autoupdate) getchart(); } }
     public string x {
-        get {return X;}
-        set {X = value; if (autoupdate)getchart();}}
-    public string ylabel{
+        get { return X; }
+        set { X = value; if (autoupdate) getchart(); } }
+    public string ylabel {
         get { return Ylabel; }
-        set { Ylabel = value; if (autoupdate) getchart(); }}
+        set { Ylabel = value; if (autoupdate) getchart(); } }
     public string y {
-        get { return Y;}
-        set { Y = value; if (autoupdate) getchart(); }}
+        get { return Y; }
+        set { Y = value; if (autoupdate) getchart(); } }
     public string zlabel {
         get { return Zlabel; }
-        set { Zlabel = value; if (autoupdate) getchart(); }}
+        set { Zlabel = value; if (autoupdate) getchart(); } }
     public string z {
-        get { return Z;}
-        set { Z = value; if (autoupdate) getchart(); }}
+        get { return Z; }
+        set { Z = value; if (autoupdate) getchart(); } }
     public string wlabel {
         get { return Wlabel; }
-        set { Wlabel = value; if (autoupdate) getchart(); }}
+        set { Wlabel = value; if (autoupdate) getchart(); } }
     public string w {
         get { return W; }
-        set { W = value; if (autoupdate) getchart(); }}
+        set { W = value; if (autoupdate) getchart(); } }
     public Color[] colors {
-        get { return Colors;}
-        set { Colors = value; if (autoupdate) getchart(); }}
-
+        get { return Colors; }
+        set { Colors = value; if (autoupdate) getchart(); } }
+    public int newnumcolors {
+        get { if (charttype == ChartType.BarChartVertical) return 0;  else return z.Split().Length; } // TODO: change condition after grouped bars
+        set {}
+    }
+    [SerializeField]
+    private int numcolors=0;
 
     void Start() {
         if (autostart) getchart(); 
+    }
+
+    private void Update()
+    {
+        var newc = newnumcolors;
+        // Debug.Log(newc); Debug.Log(numcolors);
+        if (newc != numcolors)
+        {
+            colors = new Color[newc];
+            numcolors = newc;
+        }
     }
 
     // start the process of chart requisition for the server
@@ -89,10 +118,21 @@ public class ChartGenerator : MonoBehaviour {
             String[] colorholder = new String[colors.Length];
             for (int i = 0; i < colors.Length; i++)
             {
-                colorholder[i] = "rgb(" + colors[i].r + "," + colors[i].g + "," + colors[i].b + ")";
+                colorholder[i] = "rgb(" + ((int) colors[i].r) + "," + ((int)colors[i].g) + "," + ((int)colors[i].b) + ")";
             }
-            
             url += String.Join(";", colorholder);
+            url += "&title=" + title;
+
+            String[] labels = { xlabel, ylabel, wlabel, zlabel };
+            String[] label_axis = { "x","y","w","z" };
+            for (int i = 0; i < labels.Length; i++)
+            {
+                if (labels[i] != "")
+                {
+                    url += "&" + label_axis[i] + "label=" + labels[i];
+                }
+            }
+
             Debug.Log("requisition: " + url);
             StartCoroutine(GetRequest(url));
         }
@@ -134,10 +174,8 @@ public class ChartGenerator : MonoBehaviour {
             {
                 Debug.Log(pages[page] + ": Error: " + webRequest.error);
             }
-            else
-            {
-                generateViz(webRequest.downloadHandler.text); // plain base64 string that (hopefully) came without any html tag
-            }
+            else generateViz(webRequest.downloadHandler.text); // plain base64 string that (hopefully) came without any html tag
+            
         }
     }
 
