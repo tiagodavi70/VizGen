@@ -17,8 +17,8 @@
   },
   "mark":{"type":"line"},
   "encoding": {
-    "x": {"field": "x", "type": "nominal","title":"","scale": {"rangeStep": null},"sort":null},
-    "y": {"field": "y", "type": "quantitative","title":""},
+    "x": {"field": "x", "type": "nominal","title":"","scale": {"rangeStep": null}},
+    "y": {"field": "y", "type": "quantitative","title":"","sort":null},
     "color":{"field": "z", "type": "nominal","title":""}
   }
 }

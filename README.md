@@ -1,15 +1,19 @@
 # Web-Gen-Viz
 Generate charts on the go, run the server and connect for simple chart construction.
-See the [Unity client](https://github.com/tiagodavi70/Web-Gen-Viz/tree/master/unity-client) and the [web service](https://github.com/tiagodavi70/Web-Gen-Viz/tree/master/chart-generation-service/) for instructions on installation and usage.
+See the [web service](https://github.com/tiagodavi70/Web-Gen-Viz/tree/master/chart-generation-service/) and the [Unity client](https://github.com/tiagodavi70/Web-Gen-Viz/tree/master/unity-client) for instructions on installation and usage.
 
-# Architecture Overview 
+# Overview 
+The purpose of the service is to provide simple abstractions for chart generation, mainly in form of images for use in textures. The main reason for this format is to ease the usage in 3D tools, mainly [Unity](https://unity.com/). It works over [VEGA and VEGA-LITE](https://vega.github.io/) grammars, generating various types of parameterized charts. 
 
-The purpose of the service is to provide simple abstractions for chart generation, mainly in form of images for use in textures. 
 
+# Technical aspects
+The generated charts are exported in two non-interactive formats, PNG and SVG. The interaction in web pages can be made possible with SVG manipulation, and with some tweaks make it fully VEGA compatible. On the other hand, on 3D environments, the interaction with 2D charts is a research problem, and we present some solutions. With png textures, the charts are transported by the network as a `base64` string, to ease communication. 
+ 
 
 # TODO
-* Put some images of it working, a big one at the beginning for overview and some others for example
-* Needs the architecture image
+* gifs of the library on AR
+* Images of it working, a big one at the beginning for overview and some others for example
+* Architecture image
 * step by step video on clean machine
 
 # Contributions

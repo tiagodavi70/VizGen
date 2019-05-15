@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
+using System.Linq;
 
 public class ChartGenerator : MonoBehaviour {
 
@@ -17,6 +18,14 @@ public class ChartGenerator : MonoBehaviour {
         PieChart,
         AreaChart,
         Scatterplot
+    }
+
+    public enum DataType
+    {
+        Manual,
+        Dataset,
+        Placeholder,
+        Request
     }
 
     [SerializeField]
@@ -41,6 +50,8 @@ public class ChartGenerator : MonoBehaviour {
     private string W = "1,3,5,7";
     [SerializeField]
     public Color[] Colors = { new Color(70 / 255f, 130 / 255f, 180 / 255f) };
+    private Color[] categorycolors = { new Color(70 / 255f, 130 / 255f, 180 / 255f), new Color(30 / 255f, 30 / 255f, 180 / 255f),
+    new Color(70 / 255f, 30 / 255f, 10 / 255f), new Color(40 / 255f, 40 / 255f, 80 / 255f), new Color(244 / 255f, 130 / 255f, 180 / 255f)};
     public bool ShowLabels;
     public bool Legends;
     public bool Sort;
@@ -81,12 +92,26 @@ public class ChartGenerator : MonoBehaviour {
     public Color[] colors {
         get { return Colors; }
         set { Colors = value; if (autoupdate) getchart(); } }
-    public int newnumcolors {
-        get { if (charttype == ChartType.BarChartVertical) return 0;  else return z.Split().Length; } // TODO: change condition after grouped bars
-        set {}
+    public int numcolors() {
+        int newc = 0;
+        int[] a = { };
+
+        if (charttype != ChartType.BarChartVertical) // TODO: change condition after grouped bars
+        {
+            newc = z.Split(',').Distinct().ToArray().Length;
+        }
+
+        if (newc != oldnumcolors)
+        {
+            colors = new Color[newc];
+            for (int i = 0; i < newc; i++)
+                colors[i] = categorycolors[i % categorycolors.Length]; // update colors with predefined array
+            oldnumcolors = newc;
+        }
+        return newc;
     }
     [SerializeField]
-    private int numcolors=0;
+    private int oldnumcolors=0;
 
     void Start() {
         if (autostart) getchart(); 
@@ -94,13 +119,7 @@ public class ChartGenerator : MonoBehaviour {
 
     private void Update()
     {
-        var newc = newnumcolors;
-        // Debug.Log(newc); Debug.Log(numcolors);
-        if (newc != numcolors)
-        {
-            colors = new Color[newc];
-            numcolors = newc;
-        }
+        numcolors();
     }
 
     // start the process of chart requisition for the server
@@ -118,7 +137,8 @@ public class ChartGenerator : MonoBehaviour {
             String[] colorholder = new String[colors.Length];
             for (int i = 0; i < colors.Length; i++)
             {
-                colorholder[i] = "rgb(" + ((int) colors[i].r) + "," + ((int)colors[i].g) + "," + ((int)colors[i].b) + ")";
+                colorholder[i] = "rgb(" + ((int)(colors[i].r * 255f)) + "," + ((int)(colors[i].g * 255f)) + "," + ((int)(colors[i].b * 255f)) + ")";
+                //Debug.Log(colorholder[i], );
             }
             url += String.Join(";", colorholder);
             url += "&title=" + title;
@@ -140,6 +160,7 @@ public class ChartGenerator : MonoBehaviour {
 
     public void getchartfromurl(String url)
     {
+        // TODO: new datatype constraint 
         StartCoroutine(GetRequest(url));
     }
 

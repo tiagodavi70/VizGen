@@ -93,9 +93,10 @@
                         if (this.chartType === "barchartvertical") {
                             vlspec.encoding.color.value = this.settings["colors"];
                         }
+						//console.log(this.settings["colors"]);
+						vlspec.encoding.color.scale = {"range" : this.settings["colors"]};
                     }
                     spec = vl.compile(vlspec).spec;
-                    console.log(spec);
                 }
             } else {
                 spec = await vega.loader().load(specfilepath);
@@ -103,7 +104,7 @@
                 spec.data[0].values = this.data;
 
                 if (this.chartType === "piechart") {
-
+					spec.scales[0].range = this.settings["colors"];
                 }
                 spec.title = this.settings["title"];
             }

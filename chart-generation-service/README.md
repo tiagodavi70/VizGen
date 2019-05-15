@@ -39,35 +39,35 @@ All these examples assume a server running on default settings.
 
 * URL GET requisitions
 
-bar chart
+Bar chart
 ``` bash
-http://localhost:3000/chartgen.html?x=orange,pear,orange,pear&y=1,2,3,4&chart=barchartvertical&title=fruits
+http://localhost:3000/chartgen.html?x=orange,pear,pineapple,strawberry&y=1,2,3,4&chart=barchartvertical&title=title
 ```
-![Bar Chart Example](https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "Bar Chart Request Example")
+![Bar Chart Example](https://github.com/tiagodavi70/Web-Gen-Viz/blob/master/imgs/barchartvertical.png "Bar Chart Request Example")
 
 Area chart 
 ``` bash
-http://localhost:3000/chartgen.html?x=orange,pear,orange,pear&y=1,2,3,4&z=0,0,1,1&chart=areachart
+http://localhost:3000/chartgen.html?x=jan,fev,jan,fev&y=4,5,4,5&z=0,0,1,1&chart=areachart
 ```
-![Area Chart Example](https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "Area Chart Request Example")
+![Area Chart Example](https://github.com/tiagodavi70/Web-Gen-Viz/blob/master/imgs/areachart.png "Area Chart Request Example")
 
 Scatterplot
 ``` bash
 http://localhost:3000/chartgen.html?chart=scatterplot&x=1,2,1,2&y=1,2,3,4&z=0,0,1,1&w=1,3,5,7&title=magic&xlabel=key&ylabel=value&zlabel=color&wlabel=size
 ```
-![Scatterplot Example](https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "Scatterplot Request Example")
+![Scatterplot Example](https://github.com/tiagodavi70/Web-Gen-Viz/blob/master/imgs/scatterplot.png "Scatterplot Request Example")
 
 Line chart
 ``` bash
-http://localhost:3000/chartgen.html?x=orange,pear,apple,orange,pear,apple&y=1,2,3,4,5,6&z=america,america,europe,europe,africa,africa&chart=linechart&title=Fruits&xlabel=name&ylabel=sold&zlabel=continet
+http://localhost:3000/chartgen.html?x=orange,orange,orange,apple,apple,apple,pear,pear,pear&y=3,5,8,4,5,6,7,8,9&z=america,europe,africa,america,europe,africa,america,europe,africa&chart=linechart&title=Fruits&xlabel=name&ylabel=sold&zlabel=continent
 ```
-![Line Chart Example](https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "Line Chart Request Example")
+![Line Chart Example](https://github.com/tiagodavi70/Web-Gen-Viz/blob/master/imgs/linechart.png "Line Chart Request Example")
 
 Pie chart & colors
 ``` bash
-http://localhost:3000/chartgen.html?x=orange,pear,orange,pear&y=1,2,3,4&chart=piechart&colors=rgb(10,100,10);rgb(130,180,210);rgb(80,5,5);rgb(110,130,90)
+http://localhost:3000/chartgen.html?x=orange,pear,strawberry,apple&y=1,2,3,4&chart=piechart&colors=rgb(255,103,0);rgb(144,238,144);rgb(252,90,141);rgb(255,8,0)
 ```
-![Pie Chart Example](https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "Pie Chart Request Example")
+![Pie Chart Example](https://github.com/tiagodavi70/Web-Gen-Viz/blob/master/imgs/piechart.png "Pie Chart Request Example")
 
 
 * Server side script
@@ -117,7 +117,7 @@ The `title`, `labels` (depending on chart type) and `colors` are available to al
   3. `z` - CSV numbers or categories list
   4. `w` - CSV numbers or categories list
 
-* `colors` - HTML color names, Hex or RGB values (only multivalued parameter separated by __;__)
+* `colors` - HTML color names, Hex or RGB values (only multivalued parameter separated by __;__). Number of colors must conform with respective dimension `z` dimension 
 * `title`, `xlabels`, `ylabel`, `zlabels`, `wlabel` - string
 
 # TODO
@@ -126,12 +126,12 @@ The `title`, `labels` (depending on chart type) and `colors` are available to al
 
 sort - true or false (default false)  
 interpolation - single categoric (line and area charts - recover list from documentation)  
-inner - single number ranged from 0 - height*0.9 - _(default 0, pie chart)_ 
+inner - single number ranged from 0 - height \* 0.9 - _(default 0, pie chart)_ 
 padding -single number ranged from 0 - 1 - _(default 0, pie chart)_  
 background - background color (default #FFFFFF)
 fontsize - font size for title, labels and legends (default 20) 
 
 * POST requests
 * return of json for interaction on client
-* filter
+* filter logic
 * html usage example

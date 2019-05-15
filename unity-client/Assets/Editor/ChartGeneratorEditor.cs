@@ -9,6 +9,8 @@ public class ChartGeneratorEditor : Editor
 {
     [SerializeField]
     ChartGenerator script;
+    [SerializeField]
+    ChartGenerator.DataType datatype;
 
     void OnEnable()
     {
@@ -23,6 +25,8 @@ public class ChartGeneratorEditor : Editor
         script.charttype = (ChartGenerator.ChartType)EditorGUILayout.EnumPopup("Visualization", script.charttype);
         script.title = EditorGUILayout.TextField("Title", script.title);
         EditorGUILayout.Space();
+
+        script.charttype = (ChartGenerator.ChartType)EditorGUILayout.EnumPopup("Visualization", script.charttype);
 
         script.xlabel = EditorGUILayout.TextField("Label X", script.xlabel);
         script.x = EditorGUILayout.TextField("x", script.x);
@@ -55,10 +59,15 @@ public class ChartGeneratorEditor : Editor
                 //Debug.Log(script.colors[0]);
                 script.colors[0] = EditorGUILayout.ColorField("Bars color", script.colors[0]);
                 break;
-            case ChartGenerator.ChartType.LineChart:   
+            case ChartGenerator.ChartType.LineChart:
             case ChartGenerator.ChartType.PieChart:
             case ChartGenerator.ChartType.AreaChart:
             case ChartGenerator.ChartType.Scatterplot:
+                for (int i = 0; i < script.numcolors(); i++)
+                {
+                    //Debug.Log(script.numcolors());
+                    script.colors[i] = EditorGUILayout.ColorField("Color " + i, script.colors[i]);
+                }
                 break;
         }
         if (EditorApplication.isPlaying)
