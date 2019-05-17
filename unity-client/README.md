@@ -10,13 +10,13 @@ Import the `.unitypackage` of this directory in your project. The _Vis_ prefab h
 
 The editor options allow changes on visualizations types and its options. The editor interface allows changes pre-run, with changes on almost every  (full settings vary from visualization from visualization). Post-run changes must be made through the API, in execution time. 
 
-![General Interface](https://github.com/tiagodavi70/Web-Gen-Viz/blob/master/imgs/unity_interface.png "General editor interface")
+![General Interface](https://github.com/tiagodavi70/Web-Gen-Viz/blob/master/imgs/unity_interface.jpg "General editor interface")
 
-![Bar Chart Example](https://github.com/tiagodavi70/Web-Gen-Viz/blob/master/imgs/unity_barchart.png "Bar Chart Example")
+![Bar Chart Example](https://github.com/tiagodavi70/Web-Gen-Viz/blob/master/imgs/unity_barchart.jpg "Bar Chart Example")
 
-![Scatterplot Example](https://github.com/tiagodavi70/Web-Gen-Viz/blob/master/imgs/unity_scatterplot.png "Scatterplot Example")
+![Scatterplot Example](https://github.com/tiagodavi70/Web-Gen-Viz/blob/master/imgs/unity_scatterplot.jpg "Scatterplot Example")
 
-![Multiple](https://github.com/tiagodavi70/Web-Gen-Viz/blob/master/imgs/unity_multiple.png "Multiple charts Example")
+![Multiple](https://github.com/tiagodavi70/Web-Gen-Viz/blob/master/imgs/unity_multiple.jpg "Multiple charts Example")
 
 
 ## API Reference
