@@ -93,12 +93,15 @@ public class ChartGenerator : MonoBehaviour {
         get { return Colors; }
         set { Colors = value; if (autoupdate) getchart(); } }
     public int numcolors() {
-        int newc = 0;
-        int[] a = { };
+        int newc = 1;
 
-        if (charttype != ChartType.BarChartVertical) // TODO: change condition after grouped bars
+        if (charttype != ChartType.BarChartVertical && charttype != ChartType.PieChart) // TODO: change condition after grouped bars
         {
             newc = z.Split(',').Distinct().ToArray().Length;
+        }
+        if (charttype == ChartType.PieChart)
+        {
+            newc = x.Split(',').Distinct().ToArray().Length;
         }
 
         if (newc != oldnumcolors)
@@ -111,7 +114,7 @@ public class ChartGenerator : MonoBehaviour {
         return newc;
     }
     [SerializeField]
-    private int oldnumcolors=0;
+    private int oldnumcolors=1;
 
     void Start() {
         if (autostart) getchart(); 
@@ -128,9 +131,9 @@ public class ChartGenerator : MonoBehaviour {
         if (verifyparameters()) {
             string url = "http://localhost:3000/chartgen.html?x=" + x + "&y=" + y + "&chart=" + Charttype.ToString().ToLower();
 
-            if (checkmaxdimensions() > 2)
+            if (maxdimensions() > 2)
                 url += "&z=" + z;
-            if (checkmaxdimensions() > 3)
+            if (maxdimensions() > 3)
                 url += "&w=" + w;
 
             url += "&colors=";
@@ -200,7 +203,7 @@ public class ChartGenerator : MonoBehaviour {
         }
     }
 
-    public int checkmaxdimensions() // charts have different dimensions so we need to know what options show to user
+    public int maxdimensions() // charts have different dimensions so we need to know what options show to user
     {
         int dim = 0;
         switch (charttype)

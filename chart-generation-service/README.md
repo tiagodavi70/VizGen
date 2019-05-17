@@ -52,8 +52,8 @@ http://localhost:3000/chartgen.html?x=jan,fev,jan,fev&y=4,5,4,5&z=0,0,1,1&chart=
 ![Area Chart Example](https://github.com/tiagodavi70/Web-Gen-Viz/blob/master/imgs/areachart.png "Area Chart Request Example")
 
 Scatterplot
-``` bash
 http://localhost:3000/chartgen.html?chart=scatterplot&x=1,2,1,2&y=1,2,3,4&z=0,0,1,1&w=1,3,5,7&title=magic&xlabel=key&ylabel=value&zlabel=color&wlabel=size
+``` bash
 ```
 ![Scatterplot Example](https://github.com/tiagodavi70/Web-Gen-Viz/blob/master/imgs/scatterplot.png "Scatterplot Request Example")
 

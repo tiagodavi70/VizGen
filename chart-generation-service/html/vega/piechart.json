@@ -3,6 +3,7 @@
   "width": 200,
   "height": 200,
   "title":"",
+  "background": "white",
   "data": [
     {
       "name": "table",

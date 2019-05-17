@@ -26,7 +26,7 @@ public class ChartGeneratorEditor : Editor
         script.title = EditorGUILayout.TextField("Title", script.title);
         EditorGUILayout.Space();
 
-        script.charttype = (ChartGenerator.ChartType)EditorGUILayout.EnumPopup("Visualization", script.charttype);
+        // script.charttype = (ChartGenerator.DataType)EditorGUILayout.EnumPopup("Visualization", script.datatype);
 
         script.xlabel = EditorGUILayout.TextField("Label X", script.xlabel);
         script.x = EditorGUILayout.TextField("x", script.x);
@@ -38,7 +38,7 @@ public class ChartGeneratorEditor : Editor
         EditorGUILayout.LabelField("Usage example", "1,2,3,4");
         EditorGUILayout.Space();
 
-        if (script.checkmaxdimensions() > 2)
+        if (script.maxdimensions() > 2)
         {
             script.zlabel = EditorGUILayout.TextField("Label Z", script.zlabel);
             script.z = EditorGUILayout.TextField("z", script.z);
@@ -46,13 +46,14 @@ public class ChartGeneratorEditor : Editor
             EditorGUILayout.Space();
         }
 
-        if (script.checkmaxdimensions() > 3)
+        if (script.maxdimensions() > 3)
         {
             script.wlabel = EditorGUILayout.TextField("Label w", script.wlabel);
             script.w = EditorGUILayout.TextField("w", script.w);
             EditorGUILayout.LabelField("Usage example", "1,3,5,7");
             EditorGUILayout.Space();
         }
+        var newc = script.numcolors();
         switch (script.charttype)
         {
             case ChartGenerator.ChartType.BarChartVertical:
@@ -63,7 +64,7 @@ public class ChartGeneratorEditor : Editor
             case ChartGenerator.ChartType.PieChart:
             case ChartGenerator.ChartType.AreaChart:
             case ChartGenerator.ChartType.Scatterplot:
-                for (int i = 0; i < script.numcolors(); i++)
+                for (int i = 0; i < newc; i++)
                 {
                     //Debug.Log(script.numcolors());
                     script.colors[i] = EditorGUILayout.ColorField("Color " + i, script.colors[i]);

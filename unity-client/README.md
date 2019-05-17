@@ -14,7 +14,7 @@ The editor options allow changes on visualizations types and its options. The ed
 
 ![Bar Chart Example](https://github.com/tiagodavi70/Web-Gen-Viz/blob/master/imgs/unity_barchart.png "Bar Chart Example")
 
-![Scatterplot Example](https://github.com/tiagodavi70/Web-Gen-Viz/blob/master/imgs/scatterplot.png "Scatterplot Example")
+![Scatterplot Example](https://github.com/tiagodavi70/Web-Gen-Viz/blob/master/imgs/unity_scatterplot.png "Scatterplot Example")
 
 ![Multiple](https://github.com/tiagodavi70/Web-Gen-Viz/blob/master/imgs/unity_multiple.png "Multiple charts Example")
 
@@ -54,25 +54,25 @@ Acessor methods (`get` and `set`) for changes on semantic options. `string` obje
 <a name="x" href="#x">#</a> chartinstance.<b>x</b> [<>](https://github.com/tiagodavi70/Web-Gen-Viz/blob/master/unity-client/Assets/main/ChartGenerator.cs "Source")  
 <a name="y" href="#y">#</a> chartinstance.<b>y</b> [<>](https://github.com/tiagodavi70/Web-Gen-Viz/blob/master/unity-client/Assets/main/ChartGenerator.cs "Source")  
 <a name="w" href="#w">#</a> chartinstance.<b>z</b> [<>](https://github.com/tiagodavi70/Web-Gen-Viz/blob/master/unity-client/Assets/main/ChartGenerator.cs "Source")  
-<a name="z" href="#z">#</a> chartinstance.<b>w</b> [<>](https://github.com/tiagodavi70/Web-Gen-Viz/blob/master/unity-client/Assets/main/ChartGenerator.cs "Source")
+<a name="z" href="#z">#</a> chartinstance.<b>w</b> [<>](https://github.com/tiagodavi70/Web-Gen-Viz/blob/master/unity-client/Assets/main/ChartGenerator.cs "Source")  
 Dimensions for each chart. Refer to [this](https://github.com/tiagodavi70/Web-Gen-Viz/tree/master/chart-generation-service/) for chart type dimensions availability.
   
 <a name="colors" href="#colors">#</a> chartinstance.<b>colors</b> [<>](https://github.com/tiagodavi70/Web-Gen-Viz/blob/master/unity-client/Assets/main/ChartGenerator.cs "Source")  
 Acessor methods (`get` and `set`) for changes on colors. `Color` object.
 
-<a name="numcolors" href="#numcolors">#</a> chartinstance.<b>numcolors()</b> [<>](https://github.com/tiagodavi70/Web-Gen-Viz/blob/master/unity-client/Assets/main/ChartGenerator.cs "Source")
+<a name="numcolors" href="#numcolors">#</a> chartinstance.<b>numcolors()</b> [<>](https://github.com/tiagodavi70/Web-Gen-Viz/blob/master/unity-client/Assets/main/ChartGenerator.cs "Source")  
 Number of colors of the actual chartype, from `z` dimension. Strips unique values. `int` return.
 
-<a name="getchart" href="#getchart">#</a> chartinstance.<b>getchart()</b>() [<>](https://github.com/tiagodavi70/Web-Gen-Viz/blob/master/unity-client/Assets/main/ChartGenerator.cs "Source") 
+<a name="getchart" href="#getchart">#</a> chartinstance.<b>getchart()</b>() [<>](https://github.com/tiagodavi70/Web-Gen-Viz/blob/master/unity-client/Assets/main/ChartGenerator.cs "Source")  
 Prepares requisition and updates texture on `GameObject`. This call should be made any time that an update is necessary and [autoupdate](#autoupdate) is not enabled.
 
-<a name="getchart" href="#getchart">#</a> chartinstance.<b>getchartfromurl(_string_ url)</b>() [<>](https://github.com/tiagodavi70/Web-Gen-Viz/blob/master/unity-client/Assets/main/ChartGenerator.cs "Source") 
+<a name="getchart" href="#getchart">#</a> chartinstance.<b>getchartfromurl(_string_ url)</b>() [<>](https://github.com/tiagodavi70/Web-Gen-Viz/blob/master/unity-client/Assets/main/ChartGenerator.cs "Source")  
 Receives requisition and updates texture on `GameObject`. This call should be made any time that an update is necessary and [autoupdate](#autoupdate) is not enabled. Only on 
 
-<a name="numcolors" href="#numcolors">#</a> chartinstance.<b>numcolors()</b> [<>](https://github.com/tiagodavi70/Web-Gen-Viz/blob/master/unity-client/Assets/main/ChartGenerator.cs "Source")
+<a name="numcolors" href="#numcolors">#</a> chartinstance.<b>numcolors()</b> [<>](https://github.com/tiagodavi70/Web-Gen-Viz/blob/master/unity-client/Assets/main/ChartGenerator.cs "Source")  
 Number of colors of the actual chartype, from `z` dimension. Strips unique values. `int` return.
 
-<a name="checkmaxdimensions" href="#checkmaxdimensions">#</a> chartinstance.<b>checkmaxdimensions()</b> [<>](https://github.com/tiagodavi70/Web-Gen-Viz/blob/master/unity-client/Assets/main/ChartGenerator.cs "Source")
+<a name="checkmaxdimensions" href="#checkmaxdimensions">#</a> chartinstance.<b>checkmaxdimensions()</b> [<>](https://github.com/tiagodavi70/Web-Gen-Viz/blob/master/unity-client/Assets/main/ChartGenerator.cs "Source")  
 Number of dimensions available for the actual chartype. Only on `Request` dataype.
 
 
