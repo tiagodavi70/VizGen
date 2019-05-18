@@ -5,9 +5,8 @@ using UnityEngine;
 using UnityEngine.Networking;
 using System.Linq;
 
-public class ChartGenerator : MonoBehaviour {
-
-
+public class ChartGenerator : MonoBehaviour
+{    
     public bool autostart = true;
     public bool autoupdate = false;
 
@@ -181,6 +180,11 @@ public class ChartGenerator : MonoBehaviour {
             renderer = this.gameObject.AddComponent<SpriteRenderer>(); // will crash if there's another renderer (like MeshRenderer) as component
         }
         renderer.sprite = sprite;
+
+        gameObject.AddComponent<PolygonCollider2D>();  //collider will be added after visualization render
+
+
+
     }
 
     // network connection and image download
