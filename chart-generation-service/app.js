@@ -1,4 +1,4 @@
-xconst web_server = require('express')();
+const web_server = require('express')();
 const path = require("path");
 const pages_path = __dirname + '/html';
 const ChartGenerator = require('./lib/chartgen');

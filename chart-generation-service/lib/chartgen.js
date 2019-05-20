@@ -96,7 +96,7 @@
 						//console.log(this.settings["colors"]);
 						vlspec.encoding.color.scale = {"range" : this.settings["colors"]};
                     }
-					spec.config.background = this.settings["background"] ? this.settings["background"] : spec.config.background;
+					vlspec.config.background = this.settings["background"] ? this.settings["background"] : vlspec.config.background;
                     spec = vl.compile(vlspec).spec;
                 }
             } else {
