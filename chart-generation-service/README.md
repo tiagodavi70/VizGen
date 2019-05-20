@@ -4,7 +4,7 @@ Web service to generate charts in base64 PNG string image and SVG formats.
 It works in the browser over the DOM and in the server with an URL GET format layer.
 
 ## Usage
-Two modes are available for this module, one in the browser, available with a `script` tag and one with a NodeJS server.
+Two modes are available for this module, one in the browser, available with a `script` tag and one with a NodeJS server (Tested on v10.15.1).
 
 ### Server Instalation
 

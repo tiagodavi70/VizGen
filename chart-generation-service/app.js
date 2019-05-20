@@ -1,4 +1,4 @@
-const web_server = require('express')();
+xconst web_server = require('express')();
 const path = require("path");
 const pages_path = __dirname + '/html';
 const ChartGenerator = require('./lib/chartgen');
@@ -26,13 +26,11 @@ function cleangeturl(req){
         //if (params[key])
             d[key] = params[key] === true;
 
-    // specific configurations - categoric values
-    // interpolation
-    for (let key of ["interpolation","title","xlabel","ylabel","zlabel","wlabel"] )
+    // specific configurations - categoric or single color values
+    for (let key of ["interpolation","title","xlabel","ylabel","zlabel","wlabel", "background"] )
         if (params[key]) d[key] = params[key];
 
     // specific configurations - numeric values
-    // interpolation
     for (let key of ["inner", "padding"] )
         if (params[key]) d[key] = +params[key];
 

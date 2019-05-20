@@ -96,6 +96,7 @@
 						//console.log(this.settings["colors"]);
 						vlspec.encoding.color.scale = {"range" : this.settings["colors"]};
                     }
+					spec.config.background = this.settings["background"] ? this.settings["background"] : spec.config.background;
                     spec = vl.compile(vlspec).spec;
                 }
             } else {
@@ -106,6 +107,8 @@
                 if (this.chartType === "piechart") {
 					spec.scales[0].range = this.settings["colors"];
                 }
+				
+				spec.background = this.settings["background"] ? this.settings["background"] : spec.background;
                 spec.title = this.settings["title"];
             }
             return this.render(spec); // returns svg or base64 string for node, vega.view for web

@@ -32,6 +32,10 @@ public class ChartGenerator : MonoBehaviour
     [SerializeField]
     private ChartType Charttype = ChartType.BarChartVertical;
     [SerializeField]
+    private DataType Datatype = DataType.Manual;
+    [SerializeField]
+    public Color Background = new Color(1, 1, 1);
+    [SerializeField]
     private string Xlabel = "fruits";
     [SerializeField]
     private string X = "pear,orange,pineapple,blueberry";
@@ -58,53 +62,44 @@ public class ChartGenerator : MonoBehaviour
     public float Inner;
     public float Padding;
 
-    public ChartType charttype {
-        get { return Charttype; }
-        set { Charttype = value; if (autoupdate) getchart(); } }
-    public string title {
-        get { return Title; }
-        set { Title = value; if (autoupdate) getchart(); } }
-    public string xlabel {
-        get { return Xlabel; }
-        set { Xlabel = value; if (autoupdate) getchart(); } }
-    public string x {
-        get { return X; }
-        set { X = value; if (autoupdate) getchart(); } }
-    public string ylabel {
-        get { return Ylabel; }
-        set { Ylabel = value; if (autoupdate) getchart(); } }
-    public string y {
-        get { return Y; }
-        set { Y = value; if (autoupdate) getchart(); } }
-    public string zlabel {
-        get { return Zlabel; }
-        set { Zlabel = value; if (autoupdate) getchart(); } }
-    public string z {
-        get { return Z; }
-        set { Z = value; if (autoupdate) getchart(); } }
-    public string wlabel {
-        get { return Wlabel; }
-        set { Wlabel = value; if (autoupdate) getchart(); } }
-    public string w {
-        get { return W; }
-        set { W = value; if (autoupdate) getchart(); } }
-    public Color[] colors {
-        get { return Colors; }
-        set { Colors = value; if (autoupdate) getchart(); } }
+    /* TODO: Mess around with this to try a good solution         */
+    [SerializeField]
+    public int indexdataset = 0;
+    [SerializeField]
+    public int xindex = 0;
+    [SerializeField]
+    public int yindex = 1;
+    [SerializeField]
+    public int zindex = 2;
+    [SerializeField]
+    public int windex = 3;
+
+    public ChartType charttype { get { return Charttype; } set { Charttype = value; if (autoupdate) getchart(); } }
+    public DataType datatype { get { return Datatype; } set { Datatype = value; if (autoupdate) getchart(); } }
+    public string title { get { return Title; } set { Title = value; if (autoupdate) getchart(); } }
+    public string xlabel { get { return Xlabel; } set { Xlabel = value; if (autoupdate) getchart(); } }
+    public string x { get { return X; } set { X = value; if (autoupdate) getchart(); } }
+    public string ylabel { get { return Ylabel; } set { Ylabel = value; if (autoupdate) getchart(); } }
+    public string y { get { return Y; } set { Y = value; if (autoupdate) getchart(); } }
+    public string zlabel { get { return Zlabel; } set { Zlabel = value; if (autoupdate) getchart(); } }
+    public string z { get { return Z; } set { Z = value; if (autoupdate) getchart(); } }
+    public string wlabel { get { return Wlabel; } set { Wlabel = value; if (autoupdate) getchart(); } }
+    public string w { get { return W; } set { W = value; if (autoupdate) getchart(); } }
+    public Color[] colors { get { return Colors; } set { Colors = value; if (autoupdate) getchart(); } }
+    public Color background { get { return Background; } set { Background = value; if (autoupdate) getchart(); } }
+
+    [SerializeField]
+    private int oldnumcolors = 1;
     public int numcolors() {
         int newc = 1;
 
         if (charttype != ChartType.BarChartVertical && charttype != ChartType.PieChart) // TODO: change condition after grouped bars
-        {
             newc = z.Split(',').Distinct().ToArray().Length;
-        }
+        
         if (charttype == ChartType.PieChart)
-        {
             newc = x.Split(',').Distinct().ToArray().Length;
-        }
 
-        if (newc != oldnumcolors)
-        {
+        if (newc != oldnumcolors) {
             colors = new Color[newc];
             for (int i = 0; i < newc; i++)
                 colors[i] = categorycolors[i % categorycolors.Length]; // update colors with predefined array
@@ -112,8 +107,6 @@ public class ChartGenerator : MonoBehaviour
         }
         return newc;
     }
-    [SerializeField]
-    private int oldnumcolors=1;
 
     void Start() {
         if (autostart) getchart(); 
@@ -121,7 +114,7 @@ public class ChartGenerator : MonoBehaviour
 
     private void Update()
     {
-        numcolors();
+        //numcolors();
     }
 
     // start the process of chart requisition for the server
@@ -139,11 +132,12 @@ public class ChartGenerator : MonoBehaviour
             String[] colorholder = new String[colors.Length];
             for (int i = 0; i < colors.Length; i++)
             {
-                colorholder[i] = "rgb(" + ((int)(colors[i].r * 255f)) + "," + ((int)(colors[i].g * 255f)) + "," + ((int)(colors[i].b * 255f)) + ")";
+                colorholder[i] = colorToWebColor(colors[i]); // "rgb(" + ((int)(colors[i].r * 255f)) + "," + ((int)(colors[i].g * 255f)) + "," + ((int)(colors[i].b * 255f)) + ")";
                 //Debug.Log(colorholder[i], );
             }
             url += String.Join(";", colorholder);
             url += "&title=" + title;
+            url += "&background=" + colorToWebColor(background);
 
             String[] labels = { xlabel, ylabel, wlabel, zlabel };
             String[] label_axis = { "x","y","w","z" };
@@ -234,5 +228,10 @@ public class ChartGenerator : MonoBehaviour
     public bool verifyparameters() // TODO: verify dimensions to avoid send broken requistions
     {
         return true;
+    }
+
+    public static string colorToWebColor(Color c)
+    {
+        return "rgb(" + ((int)(c.r * 255f)) + "," + ((int)(c.g * 255f)) + "," + ((int)(c.b * 255f)) + ")";
     }
 }

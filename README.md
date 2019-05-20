@@ -21,3 +21,5 @@ All servers modifications (unless it is a bug correction) must update the corres
 
 # Credits and Contact
 * MSc. Tiago Davi Oliveira de Araújo - [email](mailto:tiagodavi70@gmail.com)
+* Vinicius Queiroz - [email](viniciusquei@hotmail.com)
+
