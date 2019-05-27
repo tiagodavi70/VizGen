@@ -35,16 +35,16 @@ Enum with all chart types available. For full list, refer to [this](https://gith
 <a name="DataType" href="#DataType">#</a> ChartGenerator.<b>DataType</b>() [<>](https://github.com/tiagodavi70/Web-Gen-Viz/blob/master/unity-client/Assets/src/ChartGenerator.cs "Source")  
 Enum with Data types allowed. `Manual` refers to editor data, as the user can pre-define all configuration on editor. `Dataset` asks for a file dataset on `Assets/datasets` directory, allows configuration and is CSV compatible only. `Placeholder` turns the `GameObject` in a `ChartGenerator` recipient, adequate for dynamic-only changes. `Request` to be implemented.
 
-<a name="_charttype" href="#_charttype">#</a> ChartGenerator.<b>charttype</b>() [<>](https://github.com/tiagodavi70/Web-Gen-Viz/blob/master/unity-client/Assets/src/ChartGenerator.cs "Source")  
+<a name="_charttype" href="#_charttype">#</a> ChartGenerator.<b>charttype</b> [<>](https://github.com/tiagodavi70/Web-Gen-Viz/blob/master/unity-client/Assets/src/ChartGenerator.cs "Source")  
 Current ChartType for the object. 
 
-<a name="_datatype" href="#_datatype">#</a> ChartGenerator.<b>dataype</b>() [<>](https://github.com/tiagodavi70/Web-Gen-Viz/blob/master/unity-client/Assets/src/ChartGenerator.cs "Source")  
+<a name="_datatype" href="#_datatype">#</a> ChartGenerator.<b>dataype</b> [<>](https://github.com/tiagodavi70/Web-Gen-Viz/blob/master/unity-client/Assets/src/ChartGenerator.cs "Source")  
 Current DataType for the object. 
 
-<a name="autostart" href="#autostart">#</a> chartinstance.<b>autostart</b>() [<>](https://github.com/tiagodavi70/Web-Gen-Viz/blob/master/unity-client/Assets/src/ChartGenerator.cs "Source") 
+<a name="autostart" href="#autostart">#</a> chartinstance.<b>autostart</b> [<>](https://github.com/tiagodavi70/Web-Gen-Viz/blob/master/unity-client/Assets/src/ChartGenerator.cs "Source") 
 Flag for chart generation on `Start()` call.
 
-<a name="autoupdate" href="#autoupdate">#</a> chartinstance.<b>autoupdate</b>() [<>](https://github.com/tiagodavi70/Web-Gen-Viz/blob/master/unity-client/Assets/src/ChartGenerator.cs "Source") 
+<a name="autoupdate" href="#autoupdate">#</a> chartinstance.<b>autoupdate</b> [<>](https://github.com/tiagodavi70/Web-Gen-Viz/blob/master/unity-client/Assets/src/ChartGenerator.cs "Source") 
 Flag for automatic update with any change on semantics,visual mark or data. It does not involve the `Update()` call of MonoBehaviour lifecycle.
 
 <a name="title" href="#title">#</a> chartinstance.<b>title</b> [<>](https://github.com/tiagodavi70/Web-Gen-Viz/blob/master/unity-client/Assets/src/ChartGenerator.cs "Source")  
@@ -72,14 +72,17 @@ Number of colors of the current chartype, extracted from `z` dimension. Strips u
 <a name="colortowebcolor" href="#colortowebcolor">#</a> ChartGenerator.<b>colorToWebColor</b> [<>](https://github.com/tiagodavi70/Web-Gen-Viz/blob/master/unity-client/Assets/src/ChartGenerator.cs "Source")  
 Converts an Unity `Color` object to its respective RGB (0-255) string.
 
-<a name="getchart" href="#getchart">#</a> chartinstance.<b>getchart()</b>() [<>](https://github.com/tiagodavi70/Web-Gen-Viz/blob/master/unity-client/Assets/src/ChartGenerator.cs "Source")  
+<a name="getchart" href="#getchart">#</a> chartinstance.<b>getchart()</b> [<>](https://github.com/tiagodavi70/Web-Gen-Viz/blob/master/unity-client/Assets/src/ChartGenerator.cs "Source")  
 Prepares requisition and updates texture on `GameObject`. This call should be made any time that an update is necessary and [autoupdate](#autoupdate) is not enabled.
 
-<a name="getchart" href="#getchart">#</a> chartinstance.<b>getchartfromurl(_string_ url)</b>() [<>](https://github.com/tiagodavi70/Web-Gen-Viz/blob/master/unity-client/Assets/src/ChartGenerator.cs "Source")  
+<a name="getchart" href="#getchart">#</a> chartinstance.<b>getchartfromurl(_string_ url)</b> [<>](https://github.com/tiagodavi70/Web-Gen-Viz/blob/master/unity-client/Assets/src/ChartGenerator.cs "Source")  
 Receives requisition and updates texture on `GameObject`. This call should be made any time that an update is necessary and [autoupdate](#autoupdate) is not enabled.
 
 <a name="checkmaxdimensions" href="#checkmaxdimensions">#</a> chartinstance.<b>checkmaxdimensions()</b> [<>](https://github.com/tiagodavi70/Web-Gen-Viz/blob/master/unity-client/Assets/src/ChartGenerator.cs "Source")  
 Number of dimensions available for the actual chartype. Only on `Request` dataype.
+
+<a name="base64string" href="#base64string">#</a> chartinstance.<b>base64string</b> [<>](https://github.com/tiagodavi70/Web-Gen-Viz/blob/master/unity-client/Assets/src/ChartGenerator.cs "Source")  
+String returned from server, saved for buffer.
 
 ## ReadDatabase
 As the name implies, reads a dataset and saves it on memory in a list of lists format, parsing table like structures like CSV.

@@ -15,6 +15,7 @@ The generated charts are exported in two non-interactive formats, PNG and SVG. T
 * Images of it working, a big one at the beginning for overview and some others for example
 * Architecture image
 * step by step video on clean machine
+* Gallery
 
 # Contributions
 All servers modifications (unless it is a bug correction) must update the corresponding README, right now it's the most trustable specification outside the code. 

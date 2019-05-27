@@ -42,6 +42,8 @@ public class ChartGenerator : MonoBehaviour
     [SerializeField]
     private string Ylabel = "qt. sold";
     [SerializeField]
+    private string Base64string = "";
+    [SerializeField]
     private string Y = "1,2,3,4";
     [SerializeField]
     private string Zlabel = "Continent";
@@ -55,14 +57,15 @@ public class ChartGenerator : MonoBehaviour
     public Color[] Colors = { new Color(70 / 255f, 130 / 255f, 180 / 255f) };
     private Color[] categorycolors = { new Color(70 / 255f, 130 / 255f, 180 / 255f), new Color(30 / 255f, 30 / 255f, 180 / 255f),
     new Color(70 / 255f, 30 / 255f, 10 / 255f), new Color(40 / 255f, 40 / 255f, 80 / 255f), new Color(244 / 255f, 130 / 255f, 180 / 255f)};
-    public bool ShowLabels;
-    public bool Legends;
-    public bool Sort;
+    public bool ShowLabels; // not used
+    public bool Legends; // not used
+    public bool Sort; // not used
 
-    public float Inner;
-    public float Padding;
+    public float Inner; // not used
+    public float Padding; // not used
 
-    /* TODO: Mess around with this to try a good solution         */
+    /* TODO: Mess around with this to try a better solution 
+     Variables here for editor (maybe subclass?)*/
     [SerializeField]
     public int indexdataset = 0;
     [SerializeField]
@@ -87,6 +90,7 @@ public class ChartGenerator : MonoBehaviour
     public string w { get { return W; } set { W = value; if (autoupdate) getchart(); } }
     public Color[] colors { get { return Colors; } set { Colors = value; if (autoupdate) getchart(); } }
     public Color background { get { return Background; } set { Background = value; if (autoupdate) getchart(); } }
+    public string base64string { get { return Base64string; } set { } }
 
     [SerializeField]
     private int oldnumcolors = 1;
@@ -160,10 +164,11 @@ public class ChartGenerator : MonoBehaviour
         StartCoroutine(GetRequest(url));
     }
 
-    // generate sprite based on base64 string that came from server
-    void generateViz(string base64string)
+    // generate sprite based on base64 string that came from server (save it too)  TODO: two functions, separate, maybe a good place for buffer
+    void generateViz(string base64str)
     {
-        byte[] Bytes = Convert.FromBase64String(base64string);
+        Base64string = base64str;
+        byte[] Bytes = Convert.FromBase64String(base64str);
         Texture2D tex = new Texture2D(900, 465);
         tex.LoadImage(Bytes);
         Rect rect = new Rect(0, 0, tex.width, tex.height);
@@ -175,10 +180,7 @@ public class ChartGenerator : MonoBehaviour
         }
         renderer.sprite = sprite;
 
-        gameObject.AddComponent<PolygonCollider2D>();  //collider will be added after visualization render
-
-
-
+        gameObject.AddComponent<PolygonCollider2D>();  //collider will be added after visualization renders
     }
 
     // network connection and image download
