@@ -2,13 +2,13 @@
 
 Client for chart generation in a web service. It renders a chart image after a server query.
 
-## Usage
+# Usage
 
 Import the `.unitypackage` of this directory in your project. The _Vis_ prefab has the `ChartGenerator` C# Script associated as an example. This script does the server requests and generates the sprites on the game object. The prefab shows the usage and the script generates a chart on start of execution and can be updated. **`NodeJS` server must be running for this package to work**. For instructions about the server and its settings, refer to [this page](https://github.com/tiagodavi70/Web-Gen-Viz/tree/master/chart-generation-service/). 
 
-## Editor
+# Editor
 
-The editor options allow changes on visualizations types and its options. The editor interface allows changes pre-run, with changes on almost every  (full settings vary from visualization from visualization). Post-run changes must be made through the API, in execution time. 
+The editor options allow changes on visualizations types and its options. The editor interface allows changes pre-run, with changes on almost every  (full settings vary from visualization from visualization). Post-run changes must be made through the API, in execution time. Sample scenes are in the package for example of usages.
 
 ![General Interface](https://github.com/tiagodavi70/Web-Gen-Viz/blob/master/imgs/unity_interface.jpg "General editor interface")
 
@@ -19,12 +19,12 @@ The editor options allow changes on visualizations types and its options. The ed
 ![Multiple](https://github.com/tiagodavi70/Web-Gen-Viz/blob/master/imgs/unity_multiple.jpg "Multiple charts Example")
 
 
-## API Reference
+# API Reference
 
 The API works as a proxy for server queries for changes in execution time. All the editor options are avaliable during execution. As it requests new visualizations from the server, some time for the change must be taken in consideration, so have it in mind while doing transitions from one visualization to other, even if it has the same type, as for now the server has no memory of clients requests.
 
-#### ChartGenerator
-Main class of the package, impossible
+## ChartGenerator
+Main class of the package.
 
 <a name="ChartGenerator" href="#chartgenerator">#</a> <b>ChartGenerator</b>() [<>](https://github.com/tiagodavi70/Web-Gen-Viz/blob/master/unity-client/Assets/src/ChartGenerator.cs "Source")  
 Empty Constructor, placeholder for changes;
@@ -81,7 +81,7 @@ Receives requisition and updates texture on `GameObject`. This call should be ma
 <a name="checkmaxdimensions" href="#checkmaxdimensions">#</a> chartinstance.<b>checkmaxdimensions()</b> [<>](https://github.com/tiagodavi70/Web-Gen-Viz/blob/master/unity-client/Assets/src/ChartGenerator.cs "Source")  
 Number of dimensions available for the actual chartype. Only on `Request` dataype.
 
-#### ReadDatabase
+## ReadDatabase
 
 <a name="readdatabase" href="#readdatabase">#</a> <b>ReadDatabase</b>() [<>](https://github.com/tiagodavi70/Web-Gen-Viz/blob/master/unity-client/Assets/src/ReadDatabase.cs "Source")  
 Empty Constructor, placeholder for changes;
@@ -92,23 +92,23 @@ Create object and set filepath.
 <a name="path" href="#path">#</a> readerinstance.<b>path</b> [<>](https://github.com/tiagodavi70/Web-Gen-Viz/blob/master/unity-client/Assets/src/ReadDatabase.cs "Source")  
 Path for dataset. `string` object.
 
-<a name="loadfile" href="#loadfile">#</a> readerinstance.<b>loadfile()</b> [<>](https://github.com/tiagodavi70/Web-Gen-Viz/blob/master/unity-client/Assets/src/ReadDatabase.cs "Source")
+<a name="loadfile" href="#loadfile">#</a> readerinstance.<b>loadfile()</b> [<>](https://github.com/tiagodavi70/Web-Gen-Viz/blob/master/unity-client/Assets/src/ReadDatabase.cs "Source")  
 Loads file into memory, populating attributes, [column names](#columnnames) and [types](#types) of attributes. Only accepts CSV files.
 
-<a name="columnnames" href="#columnnames">#</a> readerinstance.<b>columnnames</b> [<>](https://github.com/tiagodavi70/Web-Gen-Viz/blob/master/unity-client/Assets/src/ReadDatabase.cs "Source")
+<a name="columnnames" href="#columnnames">#</a> readerinstance.<b>columnnames</b> [<>](https://github.com/tiagodavi70/Web-Gen-Viz/blob/master/unity-client/Assets/src/ReadDatabase.cs "Source")  
 Return headers of file, the column names in a `string` array.
 
-<a name="types" href="#types">#</a> readerinstance.<b>types</b> [<>](https://github.com/tiagodavi70/Web-Gen-Viz/blob/master/unity-client/Assets/src/ReadDatabase.cs "Source")
+<a name="types" href="#types">#</a> readerinstance.<b>types</b> [<>](https://github.com/tiagodavi70/Web-Gen-Viz/blob/master/unity-client/Assets/src/ReadDatabase.cs "Source")  
 Types of each attribute.
 
-<a name="getline" href="#getline">#</a> readerinstance.<b>getLine(`int` index)</b> [<>](https://github.com/tiagodavi70/Web-Gen-Viz/blob/master/unity-client/Assets/src/ReadDatabase.cs "Source")
+<a name="getline" href="#getline">#</a> readerinstance.<b>getLine(`int` index)</b> [<>](https://github.com/tiagodavi70/Web-Gen-Viz/blob/master/unity-client/Assets/src/ReadDatabase.cs "Source")  
 Return line of `index`th line.
 
-<a name="getcolumn" href="#getcolumn">#</a> readerinstance.<b>getColumn(`string` attr)</b> [<>](https://github.com/tiagodavi70/Web-Gen-Viz/blob/master/unity-client/Assets/src/ReadDatabase.cs "Source")
+<a name="getcolumn" href="#getcolumn">#</a> readerinstance.<b>getColumn(`string` attr)</b> [<>](https://github.com/tiagodavi70/Web-Gen-Viz/blob/master/unity-client/Assets/src/ReadDatabase.cs "Source")  
 Return the full `attr` column of dataset as a `string` List.
 
 
-#### Use Case Code Examples 
+## Use Case Code Examples 
 * Change Colors on Scatterplot
 ``` C# 
 // TODO
@@ -120,8 +120,6 @@ Return the full `attr` column of dataset as a `string` List.
 ```
 
 # TODO
-* usage examples
-* pictures of usage examples
-* Put and unity editor image
 * Unity architecture image
 * create a big, good example scene
+* create a video narrated tutorial
