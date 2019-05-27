@@ -24,7 +24,7 @@ The editor options allow changes on visualizations types and its options. The ed
 The API works as a proxy for server queries for changes in execution time. All the editor options are avaliable during execution. As it requests new visualizations from the server, some time for the change must be taken in consideration, so have it in mind while doing transitions from one visualization to other, even if it has the same type, as for now the server has no memory of clients requests.
 
 ## ChartGenerator
-Main class of the package.
+Main class of the package, it does the a requisition for the server and renders it on screen.
 
 <a name="ChartGenerator" href="#chartgenerator">#</a> <b>ChartGenerator</b>() [<>](https://github.com/tiagodavi70/Web-Gen-Viz/blob/master/unity-client/Assets/src/ChartGenerator.cs "Source")  
 Empty Constructor, placeholder for changes;
@@ -82,6 +82,7 @@ Receives requisition and updates texture on `GameObject`. This call should be ma
 Number of dimensions available for the actual chartype. Only on `Request` dataype.
 
 ## ReadDatabase
+As the name implies, reads a dataset and saves it on memory in a list of lists format, parsing table like structures like CSV.
 
 <a name="readdatabase" href="#readdatabase">#</a> <b>ReadDatabase</b>() [<>](https://github.com/tiagodavi70/Web-Gen-Viz/blob/master/unity-client/Assets/src/ReadDatabase.cs "Source")  
 Empty Constructor, placeholder for changes;
@@ -90,10 +91,10 @@ Empty Constructor, placeholder for changes;
 Create object and set filepath.
 
 <a name="path" href="#path">#</a> readerinstance.<b>path</b> [<>](https://github.com/tiagodavi70/Web-Gen-Viz/blob/master/unity-client/Assets/src/ReadDatabase.cs "Source")  
-Path for dataset. `string` object.
+Path for dataset. For now, the dataset must be on the `Assets/Datasets` directory.`string` object.
 
 <a name="loadfile" href="#loadfile">#</a> readerinstance.<b>loadfile()</b> [<>](https://github.com/tiagodavi70/Web-Gen-Viz/blob/master/unity-client/Assets/src/ReadDatabase.cs "Source")  
-Loads file into memory, populating attributes, [column names](#columnnames) and [types](#types) of attributes. Only accepts CSV files.
+Loads file into memory, populating attributes, [column names](#columnnames) and [types](#types) of attributes. It needs a valid [path](#path) and for now only accepts CSV files.
 
 <a name="columnnames" href="#columnnames">#</a> readerinstance.<b>columnnames</b> [<>](https://github.com/tiagodavi70/Web-Gen-Viz/blob/master/unity-client/Assets/src/ReadDatabase.cs "Source")  
 Return headers of file, the column names in a `string` array.
