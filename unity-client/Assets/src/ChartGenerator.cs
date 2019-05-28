@@ -180,7 +180,9 @@ public class ChartGenerator : MonoBehaviour
         }
         renderer.sprite = sprite;
 
-        gameObject.AddComponent<PolygonCollider2D>();  //collider will be added after visualization renders
+        PolygonCollider2D collider = gameObject.GetComponent<PolygonCollider2D>();
+        if (collider == null) 
+            gameObject.AddComponent<PolygonCollider2D>();  //collider will be added after visualization render
     }
 
     // network connection and image download
