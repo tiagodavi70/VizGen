@@ -5,7 +5,7 @@ using System.IO;
 using UnityEngine;
 using UnityEditor;
 
-public class ReadDatabase
+public class ReadDatabaseGenVis
 {
     public static string
         file1 = "Assets/Datasets/iris.csv",
@@ -24,9 +24,9 @@ public class ReadDatabase
 
     bool autostart = false;
 
-    public ReadDatabase() { pathFile = ""; }
+    public ReadDatabaseGenVis() { pathFile = ""; }
 
-    public ReadDatabase(string filepath) { pathFile = filepath; }
+    public ReadDatabaseGenVis(string filepath) { pathFile = filepath; }
 
     public void loadfile()
     {
