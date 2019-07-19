@@ -1,4 +1,4 @@
-# Web-Gen-Viz
+# VizGen
 Generate charts on the go, run the server and connect for simple chart construction.
 See the [web service](https://github.com/tiagodavi70/Web-Gen-Viz/tree/master/chart-generation-service/) and the [Unity client](https://github.com/tiagodavi70/Web-Gen-Viz/tree/master/unity-client) for instructions on installation and usage.
 
@@ -22,5 +22,5 @@ All servers modifications (unless it is a bug correction) must update the corres
 
 # Credits and Contact
 * MSc. Tiago Davi Oliveira de Araújo - [email](mailto:tiagodavi70@gmail.com)
-* Vinicius Queiroz - [email](viniciusquei@hotmail.com)
+* Vinicius Queiroz - [email](mailto:viniciusquei@hotmail.com)
 
