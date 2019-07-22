@@ -4,6 +4,7 @@ unity-client/[Oo]bj/
 unity-client/[Bb]uild/
 unity-client/[Bb]uilds/
 unity-client/[Ll]ogs/
+unity-client/.idea/
 
 # Never ignore Asset meta data
 !unity-client/[Aa]ssets/**/*.meta
@@ -48,7 +49,7 @@ unity-client/sysinfo.txt
 
 # Builds
 unity-client/*.apk
-#unity-client/*.unitypackage
+#unity-client/*.unitypackage # need this one, may not need on the future with stable releases
 
 # Crashlytics generated file
 unity-client/crashlytics-build.properties
