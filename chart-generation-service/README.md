@@ -19,6 +19,10 @@ Two modes are available for this module, one in the browser, available with a `s
   npm start
   ```
 
+### Instalation troubleshot
+The `canvas` dependency causes some dependency errors on some windows machines. Follow [this link](https://github.com/Automattic/node-canvas/wiki/Installation:-Windows) to solve this problem.
+
+
 ### Requests
 
 The interface of requests is done by the URL, on GET requisitions. The basic structure is as follows:  
@@ -52,8 +56,8 @@ http://localhost:3000/chartgen.html?x=jan,fev,jan,fev&y=4,5,4,5&z=0,0,1,1&chart=
 ![Area Chart Example](https://github.com/tiagodavi70/Web-Gen-Viz/blob/master/imgs/areachart.png "Area Chart Request Example")
 
 Scatterplot
-http://localhost:3000/chartgen.html?chart=scatterplot&x=1,2,1,2&y=1,2,3,4&z=0,0,1,1&w=1,3,5,7&title=magic&xlabel=key&ylabel=value&zlabel=color&wlabel=size
 ``` bash
+http://localhost:3000/chartgen.html?chart=scatterplot&x=1,2,1,2&y=1,2,3,4&z=0,0,1,1&w=1,3,5,7&title=magic&xlabel=key&ylabel=value&zlabel=color&wlabel=size
 ```
 ![Scatterplot Example](https://github.com/tiagodavi70/Web-Gen-Viz/blob/master/imgs/scatterplot.png "Scatterplot Request Example")
 
