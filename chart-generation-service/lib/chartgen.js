@@ -15,28 +15,41 @@
 
     }
 
-    function formatdata(datavector) {
-        let dataformatted = [];
-
-        for (let i = 0 ; i < datavector["x"].length ; i++)
-            dataformatted.push({"x":datavector["x"][i],
-                                "y":datavector["y"] ? datavector["y"][i] : 0,
-                                "z":datavector["z"] ? datavector["z"][i] : 0,
-                                "w":datavector["w"] ? datavector["w"][i] : 0});
-        return dataformatted;
+    function formaturlvector(settings) {
+        // console.log(settings);
+        let data = [];
+        let datavector = settings.data;
+        let has_x = true;
+        // console.log(settings.columns)
+        if (!_.isEmpty(settings.columns)) { // read from dataset
+            has_x = settings.columns["x"] ? true : false;
+            for (let i = 0 ; i < datavector.length ; i++)
+                data.push({ "y": datavector[i][settings.columns["y"]],
+                            "x": settings.columns["x"] ? datavector[i][settings.columns["x"]] : i,
+                            "z": settings.columns["z"] ? datavector[i][settings.columns["z"]] : 0,
+                            "w": settings.columns["w"] ? datavector[i][settings.columns["w"]] : 0});
+        } else { // read from url
+            has_x = datavector["x"] ? true : false;
+            for (let i = 0 ; i < datavector["y"].length ; i++)
+                data.push({ "y": datavector["y"][i],
+                            "x": datavector["x"] ? datavector["x"][i] : i,
+                            "z": datavector["z"] ? datavector["z"][i] : 0,
+                            "w": datavector["w"] ? datavector["w"][i] : 0});
+        }
+        settings.xlabel = has_x && !settings.xlabel? settings.xlabel : "index"; // if auto-index is used and do not have label 
+        return data;
     }
 
     class ChartGenerator {
 
-        constructor(dataExternal, selector){
-            this.chartType = dataExternal.charttype;
-            this.data = formatdata(dataExternal.data);
-            this.settings = dataExternal;
+        constructor(settings, selector){
+            this.chartType = settings.charttype;
+            this.data = formaturlvector(settings);
+            this.settings = settings;
             this.selector = selector;
             this.path = isNodeJS ? "./html/vega/" : "./vega";
 
-
-            if (isNodeJS){
+            if (isNodeJS) {
                 const fs = require('fs');
                 this.render = async function(spec) {
                     let view = new vega.View(vega.parse(spec))
@@ -73,10 +86,8 @@
 
             if (isvlspec) { // all vega lite specs goes here
                 if (isNodeJS) {
-                    vlspec = JSON.parse(fs.readFileSync(specfilepath)
-                        .toString());
-
-                    vlspec.title = {"text":this.settings["title"], "fontSize": 20};
+                    vlspec = JSON.parse(fs.readFileSync(specfilepath).toString());
+                    vlspec.title = {"text": this.settings["title"], "fontSize": 20};
                     vlspec.data.values = this.data;
                     for (let axis of ["x","y"])
                         if (vlspec.encoding[axis])
