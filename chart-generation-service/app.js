@@ -18,7 +18,13 @@ web_server.use(bodyParser.urlencoded({     // to support URL-encoded bodies
 }));
 
 function getBuffer(spec){
-    return buffer[JSON.stringify(spec)];
+    // return false;
+    console.log("params after: " + JSON.stringify(spec))
+    let a = buffer[JSON.stringify(spec)];
+    if (a)
+        return a;
+    else
+        return false;
 }
 
 function saveBuffer(spec, base64string) {
@@ -36,7 +42,7 @@ function sendVis(req, res, base64string){
 function clean_get_url(req, dataset_mode=false){
     // console.log(req.query);
     let url_query = req.query;
-    let parameters = [];
+    let parameters = {};
     parameters.data = {};
     parameters.columns = {};
     parameters.charttype = url_query.chart;
@@ -134,24 +140,24 @@ web_server.post('/upload', function (req, res) {
 });
 
 web_server.get("/generate/:dataset/chartgen.html", function(req, res) {
-    console.log("Generataing chart for: " + req.params.dataset);
+    console.log("Generating chart for: " + req.params.dataset);
     
-    let params = clean_get_url(req, true);
-    params.dataset_name = req.params.dataset;
+    let vis_settings = clean_get_url(req, true);
+    vis_settings.dataset_name = req.params.dataset;
     
-    let buffer_image = getBuffer(params);
-    if (buffer_image){
+    let buffer_image = getBuffer(vis_settings);
+    if (buffer_image) {
         sendVis(req, res, buffer_image);
     } else {
         let filepath = "datasets/" + req.params.dataset + ".csv";
         
         if (datasets[req.params.dataset]) {
-            params.data = datasets[req.params.dataset];
+            vis_settings.data = datasets[req.params.dataset];
             
-            let chartgen = new ChartGenerator(params);
+            let chartgen = new ChartGenerator(vis_settings);
             chartgen.generateChart().then((base64string) => {
                 sendVis(req, res, base64string);
-                saveBuffer(params, base64string);
+                saveBuffer(vis_settings, base64string);
             }).catch((err) => {
                 console.error(err);
             });
@@ -159,13 +165,13 @@ web_server.get("/generate/:dataset/chartgen.html", function(req, res) {
             fs.readFile(filepath, "utf8", (err, data_raw)=> {
                 if (err) throw err;
                 
-                    params.data = d3.csvParse(data_raw);
-                    datasets[req.params.dataset] = params.data;
+                    vis_settings.data = d3.csvParse(data_raw);
+                    datasets[req.params.dataset] = vis_settings.data;
     
-                    let chartgen = new ChartGenerator(params);
+                    let chartgen = new ChartGenerator(vis_settings);
                     chartgen.generateChart().then((base64string) => {
                         sendVis(req, res, base64string);
-                        saveBuffer(params, base64string);
+                        saveBuffer(vis_settings, base64string);
                     }).catch((err) => {
                         console.error(err);
                     });

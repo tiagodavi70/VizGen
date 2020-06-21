@@ -10,9 +10,8 @@
         this.fs = require("fs");
     }
 
-    // TODO: create buffer to keep all specs in memory
-    function loadAllData() {
-
+    function cast(d){
+        return isNaN(+d)?d:+d
     }
 
     function formaturlvector(settings) {
@@ -23,11 +22,21 @@
         // console.log(settings.columns)
         if (!_.isEmpty(settings.columns)) { // read from dataset
             has_x = settings.columns["x"] ? true : false;
-            for (let i = 0 ; i < datavector.length ; i++)
+            for (let i = 0 ; i < datavector.length ; i++) {
+                // let temp = {"y": +datavector[i][settings.columns["y"]]};
+                // if (settings.columns["x"]) 
+                //     temp["x"] = cast(datavector[i][settings.columns["x"]]);
+                // else 
+                //     temp["x"] = i;
+                // if (settings.columns["z"]) temp["z"] = cast(datavector[i][settings.columns["z"]]);
+                // if (settings.columns["w"]) temp["w"] = cast(datavector[i][settings.columns["w"]]);                
+                // data.push(temp);            
                 data.push({ "y": datavector[i][settings.columns["y"]],
-                            "x": settings.columns["x"] ? datavector[i][settings.columns["x"]] : i,
-                            "z": settings.columns["z"] ? datavector[i][settings.columns["z"]] : 0,
-                            "w": settings.columns["w"] ? datavector[i][settings.columns["w"]] : 0});
+                            "x": datavector[i][settings.columns["x"]] ? datavector[i][settings.columns["x"]] : i,
+                            "z": datavector[i][settings.columns["z"]] ? datavector[i][settings.columns["z"]] : 0,
+                            "w": datavector[i][settings.columns["w"]] ? datavector[i][settings.columns["w"]] : 0});
+                
+            }
         } else { // read from url
             has_x = datavector["x"] ? true : false;
             for (let i = 0 ; i < datavector["y"].length ; i++)
@@ -37,6 +46,7 @@
                             "w": datavector["w"] ? datavector["w"][i] : 0});
         }
         settings.xlabel = has_x && !settings.xlabel? settings.xlabel : "index"; // if auto-index is used and do not have label 
+        
         return data;
     }
 
@@ -77,7 +87,7 @@
         async generateChart() {
             console.log("Required: " + this.chartType);
 
-            let vllist = ["barchartvertical","linechart","scatterplot","areachart"];
+            let vllist = ["barchartvertical", "linechart", "scatterplot", "areachart"];
             let vlspec = "";
             let spec = {};
 
@@ -89,6 +99,10 @@
                     vlspec = JSON.parse(fs.readFileSync(specfilepath).toString());
                     vlspec.title = {"text": this.settings["title"], "fontSize": 20};
                     vlspec.data.values = this.data;
+                    vlspec.config.axis.titleFontSize = 12;
+                    vlspec.config.axis.labelFontSize = 12;
+                    vlspec.config.legend.titleFontSize = 12;
+                    vlspec.config.legend.labelFontSize = 12;
                     for (let axis of ["x","y"])
                         if (vlspec.encoding[axis])
                             vlspec.encoding[axis].title = this.settings[axis+"label"];
