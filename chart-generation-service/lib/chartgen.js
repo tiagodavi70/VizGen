@@ -130,7 +130,7 @@
                 spec.data[0].values = this.data;
 
                 if (this.chartType === "piechart") {
-					spec.scales[0].range = this.settings["colors"];
+					spec.scales[0].range = this.settings["colors"] ? this.settings["colors"] : spec.scales[0].range;
                 }
 				
 				spec.background = this.settings["background"] ? this.settings["background"] : spec.background;

@@ -134,14 +134,15 @@ public class ChartGeneratorEditor : Editor
         switch (script.charttype)
         {
             case ChartGenerator.ChartType.BarChartVertical:
-                script.colors[0] = EditorGUILayout.ColorField("Bars color", script.colors[0]);
-                break;
+                // script.colors[0] = EditorGUILayout.ColorField("Bars color", script.colors[0]);
+                // break;
             case ChartGenerator.ChartType.LineChart:
             case ChartGenerator.ChartType.PieChart:
             case ChartGenerator.ChartType.AreaChart:
             case ChartGenerator.ChartType.Scatterplot:
-                for (int i = 0; i < newc; i++)
-                    script.colors[i] = EditorGUILayout.ColorField("Color " + i, script.colors[i]);
+                // for (int i = 0; i < newc; i++)
+                //     script.colors[i] = EditorGUILayout.ColorField("Color " + i, script.colors[i]);
+                // break;
                 break;
         }
     }

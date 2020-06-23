@@ -132,16 +132,16 @@ public class ChartGenerator : MonoBehaviour
             if (maxdimensions() > 3)
                 url += "&w=" + w;
 
-            url += "&colors=";
-            String[] colorholder = new String[colors.Length];
-            for (int i = 0; i < colors.Length; i++)
-            {
-                colorholder[i] = colorToWebColor(colors[i]); // "rgb(" + ((int)(colors[i].r * 255f)) + "," + ((int)(colors[i].g * 255f)) + "," + ((int)(colors[i].b * 255f)) + ")";
-                //Debug.Log(colorholder[i], );
-            }
-            url += String.Join(";", colorholder);
+            // url += "&colors=";
+            // String[] colorholder = new String[colors.Length];
+            // for (int i = 0; i < colors.Length; i++)
+            // {
+            //     colorholder[i] = colorToWebColor(colors[i]); // "rgb(" + ((int)(colors[i].r * 255f)) + "," + ((int)(colors[i].g * 255f)) + "," + ((int)(colors[i].b * 255f)) + ")";
+            //     //Debug.Log(colorholder[i], );
+            // }
+            // url += String.Join(";", colorholder);
             url += "&title=" + title;
-            url += "&background=" + colorToWebColor(background);
+            // url += "&background=" + colorToWebColor(background);
 
             String[] labels = { xlabel, ylabel, wlabel, zlabel };
             String[] label_axis = { "x","y","w","z" };
@@ -153,7 +153,7 @@ public class ChartGenerator : MonoBehaviour
                 }
             }
 
-            Debug.Log("requisition: " + url);
+            Debug.Log("Requisition: " + url);
             StartCoroutine(GetRequest(url));
         }
     }

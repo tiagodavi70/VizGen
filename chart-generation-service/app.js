@@ -18,8 +18,6 @@ web_server.use(bodyParser.urlencoded({     // to support URL-encoded bodies
 }));
 
 function getBuffer(spec){
-    // return false;
-    console.log("params after: " + JSON.stringify(spec))
     let a = buffer[JSON.stringify(spec)];
     if (a)
         return a;
@@ -120,7 +118,7 @@ web_server.get('/chartgen.html', function (req, res) {
 
 // upload datasets
 web_server.post('/upload', function (req, res) {
-    console.log(req.body);
+    // console.log(req.body);
     var busboy = new Busboy({ headers: req.headers });
 
     busboy.on('error', function(err) {
