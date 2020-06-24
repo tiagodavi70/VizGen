@@ -95,23 +95,23 @@ The `title`, `labels` (depending on chart type) and `colors` are available to al
 
 #### Pie Chart
 * **piechart**
-* x y pair (categoric,number)
+* x y pair (categoric, number)
 
 #### Line Chart
 * **linechart**
-* x y pair (categoric,number)
-* x y z tuplet (categoric,number,categoric[color])
+* x y pair (categoric, number)
+* x y z tuplet (categoric, number, categoric for color)
 
 #### Area Chart
 * **areachart**
-* x y pair (categoric,number)
-* x y z tuplet (categoric,number,categoric[color])
+* x y pair (categoric, number)
+* x y z tuplet (categoric, number, categoric for color)
 
 #### Scatterplot
 * **scatterplot**
-* x y pair (categoric,number)
-* x y z tuplet (categoric,number,categoric[color])
-* x y z w tuplet (categoric,number,categoric[color],number[size])
+* x y pair (number, number)
+* x y z tuplet (number, number, categoric for color)
+* x y z w tuplet (number, number, categoric for color, number for size)
 
 
 # Full list with types of all parameters:
@@ -121,7 +121,7 @@ The `title`, `labels` (depending on chart type) and `colors` are available to al
   3. `z` - CSV numbers or categories list
   4. `w` - CSV numbers or categories list
 
-* `colors` - HTML color names, Hex or RGB values (only multivalued parameter separated by __;__). Number of colors must conform with respective dimension `z` dimension 
+* `colors` - HTML color names, Hex or RGB values (only multivalued parameter separated by __;__). Number of colors must conform with respective `z` dimension 
 * `title`, `xlabels`, `ylabel`, `zlabels`, `wlabel` - string
 
 # TODO
