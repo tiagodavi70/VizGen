@@ -45,7 +45,7 @@
                             "z": datavector["z"] ? datavector["z"][i] : 0,
                             "w": datavector["w"] ? datavector["w"][i] : 0});
         }
-        settings.xlabel = has_x && !settings.xlabel? settings.xlabel : "index"; // if auto-index is used and do not have label 
+        settings.xlabel = has_x || !settings.xlabel ? settings.xlabel : "index"; // if auto-index is used and do not have label 
         
         return data;
     }
@@ -103,9 +103,16 @@
                     vlspec.config.axis.labelFontSize = 12;
                     vlspec.config.legend.titleFontSize = 12;
                     vlspec.config.legend.labelFontSize = 12;
-                    for (let axis of ["x","y"])
+
+                    for (let axis of ["x", "y"])
                         if (vlspec.encoding[axis])
                             vlspec.encoding[axis].title = this.settings[axis+"label"];
+                    
+                    let data_extent = d3.extent(this.data, (d) => d["y"])
+                    let diff = (data_extent[1] - data_extent[0]) * 0.05;
+                    data_extent[0] -= diff;
+                    data_extent[1] += diff;
+                    vlspec.encoding.y.scale = {"domain": data_extent } 
 
                     let vlaxis = ["color","size"];
                     let extradim = ["z","w"];
