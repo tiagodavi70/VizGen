@@ -31,7 +31,7 @@
                 // if (settings.columns["z"]) temp["z"] = cast(datavector[i][settings.columns["z"]]);
                 // if (settings.columns["w"]) temp["w"] = cast(datavector[i][settings.columns["w"]]);                
                 // data.push(temp);            
-                data.push({ "y": datavector[i][settings.columns["y"]],
+                data.push({ "y": +datavector[i][settings.columns["y"]],
                             "x": datavector[i][settings.columns["x"]] ? datavector[i][settings.columns["x"]] : i,
                             "z": datavector[i][settings.columns["z"]] ? datavector[i][settings.columns["z"]] : 0,
                             "w": datavector[i][settings.columns["w"]] ? datavector[i][settings.columns["w"]] : 0});
@@ -40,7 +40,7 @@
         } else { // read from url
             has_x = datavector["x"] ? true : false;
             for (let i = 0 ; i < datavector["y"].length ; i++)
-                data.push({ "y": datavector["y"][i],
+                data.push({ "y": +datavector["y"][i],
                             "x": datavector["x"] ? datavector["x"][i] : i,
                             "z": datavector["z"] ? datavector["z"][i] : 0,
                             "w": datavector["w"] ? datavector["w"][i] : 0});
@@ -108,12 +108,13 @@
                         if (vlspec.encoding[axis])
                             vlspec.encoding[axis].title = this.settings[axis+"label"];
                     
+                    
                     let data_extent = d3.extent(this.data, (d) => d["y"])
                     let diff = (data_extent[1] - data_extent[0]) * 0.05;
                     data_extent[0] -= diff;
                     data_extent[1] += diff;
                     vlspec.encoding.y.scale = {"domain": data_extent } 
-
+                    
                     let vlaxis = ["color","size"];
                     let extradim = ["z","w"];
                     for (let i = 0 ; i < vlaxis.length ; i++)
