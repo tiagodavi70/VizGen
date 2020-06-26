@@ -55,6 +55,7 @@
         constructor(settings, selector){
             this.chartType = settings.charttype;
             this.data = formaturlvector(settings);
+            
             this.settings = settings;
             this.selector = selector;
             this.path = isNodeJS ? "./html/vega/" : "./vega";
@@ -98,7 +99,25 @@
                 if (isNodeJS) {
                     vlspec = JSON.parse(fs.readFileSync(specfilepath).toString());
                     vlspec.title = {"text": this.settings["title"], "fontSize": 20};
-                    vlspec.data.values = this.data;
+                    
+                    if (!_.isEmpty(this.settings.columns)){
+                        vlspec.data.values = this.settings.data;
+                        for (let i = 0 ; i < this.data.length ; i++)
+                            vlspec.data.values[i].index = i;
+                        vlspec.encoding["x"].field = "index";
+
+                        for ( let key of ["x", "y", "z", "w"] ) {
+                            if (this.settings.columns[key]) {
+                                vlspec.encoding[key].field = this.settings.columns[key];
+                            }
+                        }
+                    }
+                    else {
+                        vlspec.data.values = this.data;
+                    } 
+                    // vlspec.transform = []
+                    vlspec.transform = this.settings.filter.map(d => {  return {"filter": d} });
+                    // console.log(vlspec.data)
                     vlspec.config.axis.titleFontSize = 12;
                     vlspec.config.axis.labelFontSize = 12;
                     vlspec.config.legend.titleFontSize = 12;

@@ -72,6 +72,10 @@ function clean_get_url(req, dataset_mode=false){
     // specific configurations - numeric values
     for (let key of ["inner", "padding"] )
         if (url_query[key]) parameters[key] = +url_query[key];
+    
+    //[{"field":"y","lte":8000},{"field":"y","gte":4000}]
+    parameters["filter"] = JSON.parse(url_query["filter"])
+    console.log(parameters["filter"])
 
     return parameters;
 }
