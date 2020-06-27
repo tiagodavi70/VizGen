@@ -12,7 +12,7 @@ const web_port = 3000;
 let buffer = {}; // simple key value to remember requisitions
 
 // web_server.use(busboy());
-web_server.use( bodyParser.json() );       // to support JSON-encoded bodies
+web_server.use(bodyParser.json());       // to support JSON-encoded bodies
 web_server.use(bodyParser.urlencoded({     // to support URL-encoded bodies
     extended: true
 }));
@@ -51,7 +51,7 @@ function clean_get_url(req, dataset_mode=false){
             if (!dataset_mode) // if it is not to recover data from dataset, returns formated data vector
                 parameters.data[key] = url_query[key].split(",").map((d)=> isNaN(+d)?d:+d); // parse for number or not
             else // columns of dataset to mapping
-                parameters.columns[key] = url_query[key];
+                parameters.columns[key] = url_query[key].split(' ').join('');
         }
 
     if (url_query["colors"]) parameters.colors = url_query["colors"].split(";");
@@ -73,9 +73,8 @@ function clean_get_url(req, dataset_mode=false){
     for (let key of ["inner", "padding"] )
         if (url_query[key]) parameters[key] = +url_query[key];
     
-    //[{"field":"y","lte":8000},{"field":"y","gte":4000}]
-    parameters["filter"] = JSON.parse(url_query["filter"])
-    console.log(parameters["filter"])
+    if (url_query["filter"])
+        parameters["filter"] = JSON.parse(url_query["filter"].split(' ').join(''))
 
     return parameters;
 }

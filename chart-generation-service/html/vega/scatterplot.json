@@ -16,7 +16,7 @@
   },
   "mark": "point",
   "encoding": {
-    "x": {"field": "x", "type": "quantitative","title":"","sort":null},
+    "x": {"field": "x", "type": "quantitative","title":""},
     "y": {"field": "y", "type": "quantitative","title":""},
     "color": {"field": "z", "type": "nominal","title":""},
     "size": {"field":"w", "type":"quantitative","title":""}

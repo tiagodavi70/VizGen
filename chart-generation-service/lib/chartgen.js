@@ -108,16 +108,36 @@
 
                         for ( let key of ["x", "y", "z", "w"] ) {
                             if (this.settings.columns[key]) {
-                                vlspec.encoding[key].field = this.settings.columns[key];
+                                if (key == "z")
+                                    vlspec.encoding["color"].field = this.settings.columns[key];
+                                else if (key == "w")
+                                    vlspec.encoding["size"].field = this.settings.columns[key];
+                                else
+                                    vlspec.encoding[key].field = this.settings.columns[key];
+                            } else {
+                                if (key == "z")
+                                    delete vlspec.encoding["color"];
+                                else if (key == "w")
+                                    delete  vlspec.encoding["size"];
                             }
                         }
+                        
+                        vlspec.data.values = vlspec.data.values.map(d => {
+                            d[this.settings.columns.y] = +d[this.settings.columns.y]; 
+                            if (this.chartType === "scatterplot") {
+                                d[this.settings.columns.x] = +d[this.settings.columns.x]; 
+                            }
+                            return d;
+                        });
+                        console.log(vlspec.encoding);
+                        console.log(vlspec.data.values[0]);
                     }
                     else {
                         vlspec.data.values = this.data;
-                    } 
-                    // vlspec.transform = []
-                    vlspec.transform = this.settings.filter.map(d => {  return {"filter": d} });
-                    // console.log(vlspec.data)
+                    }
+                    if (this.settings.filter && this.settings.filter !== "")
+                        vlspec.transform = this.settings.filter.map(d => {  return {"filter": d} });
+                    
                     vlspec.config.axis.titleFontSize = 12;
                     vlspec.config.axis.labelFontSize = 12;
                     vlspec.config.legend.titleFontSize = 12;
@@ -126,7 +146,6 @@
                     for (let axis of ["x", "y"])
                         if (vlspec.encoding[axis])
                             vlspec.encoding[axis].title = this.settings[axis+"label"];
-                    
                     
                     let data_extent = d3.extent(this.data, (d) => d["y"])
                     let diff = (data_extent[1] - data_extent[0]) * 0.05;
@@ -145,7 +164,6 @@
                         if (this.chartType === "barchartvertical") {
                             vlspec.encoding.color.value = this.settings["colors"];
                         }
-						//console.log(this.settings["colors"]);
 						vlspec.encoding.color.scale = {"range" : this.settings["colors"]};
                     }
 					vlspec.config.background = this.settings["background"] ? this.settings["background"] : vlspec.config.background;
