@@ -130,7 +130,7 @@
                             return d;
                         });
                         console.log(vlspec.encoding);
-                        console.log(vlspec.data.values[0]);
+                        // console.log(vlspec.data.values[0]);
                     }
                     else {
                         vlspec.data.values = this.data;

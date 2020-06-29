@@ -140,6 +140,14 @@ web_server.post('/upload', function (req, res) {
     return req.pipe(busboy);
 });
 
+
+web_server.get("/info.html", function(req, res) {
+    fs.promises.readdir("datasets/").then( files => {
+        files = files.map(d => d.slice(0,-4));
+        res.send(files.join(","));
+    })
+});
+
 web_server.get("/generate/:dataset/chartgen.html", function(req, res) {
     console.log("Generating chart for: " + req.params.dataset);
     
