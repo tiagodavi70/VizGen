@@ -1,19 +1,20 @@
 {
   "$schema": "./schema.json",
-  "width": 200,
-  "height": 200,
+  "width": 400,
+  "height": 400,
   "title":"",
   "background": "white",
   "data": [
+    {"name":"data_0"},
     {
       "name": "source_0",
       "values": "",
-      "source":"",
+      "source":"data_0",
       "url":"",
       "transform": [
         {
           "type": "pie",
-          "field": "y",
+          "field": "sum",
           "startAngle": {"signal": "0"},
           "endAngle": {"signal": "6.29"},
           "sort": {"signal": "false"}

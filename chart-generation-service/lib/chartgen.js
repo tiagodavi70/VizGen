@@ -1,3 +1,5 @@
+const { filter } = require('underscore');
+
 (function() {
 
     const isNodeJS = typeof module !== 'undefined' && typeof module.exports !== 'undefined';
@@ -170,14 +172,40 @@
             }
             vlspec.config.background = this.settings["background"] ? this.settings["background"] : vlspec.config.background;
             spec = vl.compile(vlspec).spec;
-            console.log(JSON.stringify(spec.data[1]));
             let filter_transform = spec.data[1];
 
             if (!isvlspec) {
                 spec = await vega.loader().load(specfilepath);
                 spec = JSON.parse(spec);
-                spec.data[0].values = this.data;
-                spec.data.push(filter_transform);
+                // spec.data[0].values = this.settings.data;
+                // console.log(this.settings.data[0])
+
+                if (!_.isEmpty(this.settings.columns)) {
+                    spec.data[0] =
+                    {   "name":"data_0",
+                        "values": this.settings.data,
+                        "transform":[{
+                            "type": "aggregate",
+                            "fields":[this.settings.columns["y"]],
+                            "groupby": [this.settings.columns["x"]],
+                            "ops": ["sum"],
+                            "as": ["sum"],
+                    }]};
+                    spec.data[1].transform[0].field = "sum";
+                    spec.marks[0].encode.enter.fill.field = this.settings.columns["x"];
+                    spec.scales[0].domain.field = this.settings.columns["x"];
+                }
+
+                // console.log(filter_transform.transform);
+                // filter_transform.transform.forEach(d => {
+                //     spec.data[0].transform.push(d);
+                // })
+                filter_transform.transform.push(spec.data[0].transform[0]);
+                spec.data[0].transform = filter_transform.transform;
+
+                console.log(spec.data[0].transform);
+                console.log(spec.marks[0].encode.enter);
+                // console.log(spec.scales[0].domain);
 
                 // if (this.chartType === "piechart") {
 				// 	spec.scales[0].range = this.settings["colors"] ? this.settings["colors"] : spec.scales[0].range;
@@ -185,6 +213,7 @@
 				
 				// spec.background = this.settings["background"] ? this.settings["background"] : spec.background;
                 spec.title = this.settings["title"];
+                console.log(JSON.stringify(spec));
             }
             return this.render(spec); // returns svg or base64 string for node, vega.view for web
         };
