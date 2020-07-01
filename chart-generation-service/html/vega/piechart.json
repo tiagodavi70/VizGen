@@ -6,7 +6,7 @@
   "background": "white",
   "data": [
     {
-      "name": "table",
+      "name": "source_0",
       "values": "",
       "source":"",
       "url":"",
@@ -26,7 +26,7 @@
     {
       "name": "color",
       "type": "ordinal",
-      "domain": {"data": "table", "field": "x"},
+      "domain": {"data": "source_0", "field": "x"},
       "range": {"scheme": "category20"}
     }
   ],
@@ -50,7 +50,7 @@
   "marks": [
     {
       "type": "arc",
-      "from": {"data": "table"},
+      "from": {"data": "source_0"},
       "encode": {
         "enter": {
           "fill": {"scale": "color", "field": "x"},

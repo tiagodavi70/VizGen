@@ -94,91 +94,96 @@
 
             let specfilepath = this.path + this.chartType + ".json";
             let isvlspec = vllist.includes(this.chartType);
-
+                
             if (isvlspec) { // all vega lite specs goes here
-                if (isNodeJS) {
-                    vlspec = JSON.parse(fs.readFileSync(specfilepath).toString());
-                    vlspec.title = {"text": this.settings["title"], "fontSize": 20};
-                    
-                    if (!_.isEmpty(this.settings.columns)){
-                        vlspec.data.values = this.settings.data;
-                        for (let i = 0 ; i < this.data.length ; i++)
-                            vlspec.data.values[i].index = i;
-                        vlspec.encoding["x"].field = "index";
-
-                        for ( let key of ["x", "y", "z", "w"] ) {
-                            if (this.settings.columns[key]) {
-                                if (key == "z")
-                                    vlspec.encoding["color"].field = this.settings.columns[key];
-                                else if (key == "w")
-                                    vlspec.encoding["size"].field = this.settings.columns[key];
-                                else
-                                    vlspec.encoding[key].field = this.settings.columns[key];
-                            } else {
-                                if (key == "z")
-                                    delete vlspec.encoding["color"];
-                                else if (key == "w")
-                                    delete  vlspec.encoding["size"];
-                            }
-                        }
-                        
-                        vlspec.data.values = vlspec.data.values.map(d => {
-                            d[this.settings.columns.y] = +d[this.settings.columns.y]; 
-                            if (this.chartType === "scatterplot") {
-                                d[this.settings.columns.x] = +d[this.settings.columns.x]; 
-                            }
-                            return d;
-                        });
-                        console.log(vlspec.encoding);
-                        // console.log(vlspec.data.values[0]);
-                    }
-                    else {
-                        vlspec.data.values = this.data;
-                    }
-                    if (this.settings.filter && this.settings.filter !== "")
-                        vlspec.transform = this.settings.filter.map(d => {  return {"filter": d} });
-                    
-                    vlspec.config.axis.titleFontSize = 12;
-                    vlspec.config.axis.labelFontSize = 12;
-                    vlspec.config.legend.titleFontSize = 12;
-                    vlspec.config.legend.labelFontSize = 12;
-
-                    for (let axis of ["x", "y"])
-                        if (vlspec.encoding[axis])
-                            vlspec.encoding[axis].title = this.settings[axis+"label"];
-                    
-                    let data_extent = d3.extent(this.data, (d) => d["y"])
-                    let diff = (data_extent[1] - data_extent[0]) * 0.05;
-                    data_extent[0] -= diff;
-                    data_extent[1] += diff;
-                    vlspec.encoding.y.scale = {"domain": data_extent } 
-                    
-                    let vlaxis = ["color","size"];
-                    let extradim = ["z","w"];
-                    for (let i = 0 ; i < vlaxis.length ; i++)
-                        if (vlspec.encoding[vlaxis[i]])
-                            vlspec.encoding[vlaxis[i]].title = this.settings[extradim[i]+"label"];
-
-                    if (this.settings["colors"]){
-                        // single color encondings
-                        if (this.chartType === "barchartvertical") {
-                            vlspec.encoding.color.value = this.settings["colors"];
-                        }
-						vlspec.encoding.color.scale = {"range" : this.settings["colors"]};
-                    }
-					vlspec.config.background = this.settings["background"] ? this.settings["background"] : vlspec.config.background;
-                    spec = vl.compile(vlspec).spec;
-                }
+                vlspec = JSON.parse(fs.readFileSync(specfilepath).toString());
             } else {
+                vlspec = JSON.parse(fs.readFileSync(this.path + "barchartvertical" + ".json").toString());
+            }
+            vlspec.title = {"text": this.settings["title"], "fontSize": 20};
+            
+            if (!_.isEmpty(this.settings.columns)){
+                vlspec.data.values = this.settings.data;
+                for (let i = 0 ; i < this.data.length ; i++)
+                    vlspec.data.values[i].index = i;
+                vlspec.encoding["x"].field = "index";
+
+                for ( let key of ["x", "y", "z", "w"] ) {
+                    if (this.settings.columns[key]) {
+                        if (key == "z")
+                            vlspec.encoding["color"].field = this.settings.columns[key];
+                        else if (key == "w")
+                            vlspec.encoding["size"].field = this.settings.columns[key];
+                        else
+                            vlspec.encoding[key].field = this.settings.columns[key];
+                    } else {
+                        if (key == "z")
+                            delete vlspec.encoding["color"];
+                        else if (key == "w")
+                            delete  vlspec.encoding["size"];
+                    }
+                }
+                
+                vlspec.data.values = vlspec.data.values.map(d => {
+                    d[this.settings.columns.y] = +d[this.settings.columns.y]; 
+                    if (this.chartType === "scatterplot") {
+                        d[this.settings.columns.x] = +d[this.settings.columns.x]; 
+                    }
+                    return d;
+                });
+                console.log(vlspec.encoding);
+                // console.log(vlspec.data.values[0]);
+            }
+            else {
+                vlspec.data.values = this.data;
+            }
+            if (this.settings.filter && this.settings.filter !== "")
+                vlspec.transform = this.settings.filter.map(d => {  return {"filter": d} });
+            
+            vlspec.config.axis.titleFontSize = 12;
+            vlspec.config.axis.labelFontSize = 12;
+            vlspec.config.legend.titleFontSize = 12;
+            vlspec.config.legend.labelFontSize = 12;
+
+            for (let axis of ["x", "y"])
+                if (vlspec.encoding[axis])
+                    vlspec.encoding[axis].title = this.settings[axis+"label"];
+            
+            let data_extent = d3.extent(this.data, (d) => d["y"])
+            let diff = (data_extent[1] - data_extent[0]) * 0.05;
+            data_extent[0] -= diff;
+            data_extent[1] += diff;
+            vlspec.encoding.y.scale = {"domain": data_extent } 
+            
+            let vlaxis = ["color","size"];
+            let extradim = ["z","w"];
+            for (let i = 0 ; i < vlaxis.length ; i++)
+                if (vlspec.encoding[vlaxis[i]])
+                    vlspec.encoding[vlaxis[i]].title = this.settings[extradim[i]+"label"];
+
+            if (this.settings["colors"]){
+                // single color encondings
+                if (this.chartType === "barchartvertical") {
+                    vlspec.encoding.color.value = this.settings["colors"];
+                }
+                vlspec.encoding.color.scale = {"range" : this.settings["colors"]};
+            }
+            vlspec.config.background = this.settings["background"] ? this.settings["background"] : vlspec.config.background;
+            spec = vl.compile(vlspec).spec;
+            console.log(JSON.stringify(spec.data[1]));
+            let filter_transform = spec.data[1];
+
+            if (!isvlspec) {
                 spec = await vega.loader().load(specfilepath);
                 spec = JSON.parse(spec);
                 spec.data[0].values = this.data;
+                spec.data.push(filter_transform);
 
-                if (this.chartType === "piechart") {
-					spec.scales[0].range = this.settings["colors"] ? this.settings["colors"] : spec.scales[0].range;
-                }
+                // if (this.chartType === "piechart") {
+				// 	spec.scales[0].range = this.settings["colors"] ? this.settings["colors"] : spec.scales[0].range;
+                // }
 				
-				spec.background = this.settings["background"] ? this.settings["background"] : spec.background;
+				// spec.background = this.settings["background"] ? this.settings["background"] : spec.background;
                 spec.title = this.settings["title"];
             }
             return this.render(spec); // returns svg or base64 string for node, vega.view for web
