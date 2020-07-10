@@ -148,6 +148,25 @@ web_server.get("/info.html", function(req, res) {
     })
 });
 
+
+web_server.get("/attributes/:dataset/", (req, res) => {
+
+    let dataset_name = req.params.dataset;
+    let filepath = "datasets/" + dataset_name + ".csv";
+    let data = {};
+
+    if (datasets[dataset_name]) {
+        data = datasets[dataset_name];
+        res.send(Object.keys(data[0]).join(","));
+    } else {
+        fs.readFile(filepath, "utf8", (err, data_raw) => {
+            datasets[dataset_name] = d3.csvParse(data_raw);
+            data = datasets[dataset_name];
+            res.send(Object.keys(data[0]).join(","));
+        });
+    }
+});
+
 web_server.get("/generate/:dataset/chartgen.html", function(req, res) {
     console.log("Generating chart for: " + req.params.dataset);
     
@@ -171,7 +190,7 @@ web_server.get("/generate/:dataset/chartgen.html", function(req, res) {
                 console.error(err);
             });
         } else {
-            fs.readFile(filepath, "utf8", (err, data_raw)=> {
+            fs.readFile(filepath, "utf8", (err, data_raw) => {
                 if (err) throw err;
                 
                     vis_settings.data = d3.csvParse(data_raw);
