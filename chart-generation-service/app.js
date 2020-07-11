@@ -185,7 +185,7 @@ web_server.get("/attributes/:dataset/", (req, res) => {
 
     if (datasets[dataset_name]) {
         data = datasets[dataset_name];
-        res.send(Object.keys(data[0]).join(","));
+        res.send(data.columns.join(","));
     } else {
         fs.readFile(filepath, "utf8", (err, data_raw) => {
             datasets[dataset_name] = d3.csvParse(data_raw);
@@ -202,6 +202,28 @@ web_server.get("/save_state/", (req, res) => {
 
 web_server.get("/load_state/", (req, res) => {
     sendVis(req, res, buffer[buffer.state_key]);
+})
+
+function getrow(req) {
+    let raw_row = datasets[req.params.dataset][req.params.row_number];
+    let row = [];
+    for (let key of datasets[req.params.dataset].columns) {
+        row.push(raw_row[key])
+    }
+    return row.map(d => d).join(",");
+}
+
+web_server.get("/row/:dataset/:row_number", (req, res) => {
+    if (datasets[req.params.dataset]) {
+        res.send(getrow(req));
+    } else {
+        let filepath = "datasets/" + req.params.dataset + ".csv";
+        fs.readFile(filepath, "utf8", (err, data_raw) => {
+            if (err) throw err;
+                datasets[req.params.dataset] = d3.csvParse(data_raw);
+                res.send(getrow(req))
+        });
+    }
 })
 
 web_server.get("/generate/:dataset/chartgen.html", function(req, res) {
