@@ -133,7 +133,7 @@ const { filter } = require('underscore');
                     }
                     return d;
                 });
-                console.log(vlspec.encoding);
+                // console.log(vlspec.encoding);
                 // console.log(vlspec.data.values[0]);
             }
             else {
@@ -203,8 +203,8 @@ const { filter } = require('underscore');
                 filter_transform.transform.push(spec.data[0].transform[0]);
                 spec.data[0].transform = filter_transform.transform;
 
-                console.log(spec.data[0].transform);
-                console.log(spec.marks[0].encode.enter);
+                // console.log(spec.data[0].transform);
+                // console.log(spec.marks[0].encode.enter);
                 // console.log(spec.scales[0].domain);
 
                 // if (this.chartType === "piechart") {
@@ -213,7 +213,6 @@ const { filter } = require('underscore');
 				
 				// spec.background = this.settings["background"] ? this.settings["background"] : spec.background;
                 spec.title = this.settings["title"];
-                console.log(JSON.stringify(spec));
             }
             return this.render(spec); // returns svg or base64 string for node, vega.view for web
         };

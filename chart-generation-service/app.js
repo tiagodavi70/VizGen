@@ -10,12 +10,21 @@ const fs = require('fs');
 let  datasets = {};
 const web_port = 3000;
 let buffer = {}; // simple key value to remember requisitions
-
+buffer.state_key = {}
 // web_server.use(busboy());
 web_server.use(bodyParser.json());       // to support JSON-encoded bodies
 web_server.use(bodyParser.urlencoded({     // to support URL-encoded bodies
     extended: true
 }));
+
+function IsJsonString(str) {
+    try {
+        JSON.parse(str);
+    } catch (e) {
+        return false;
+    }
+    return true;
+}
 
 function getBuffer(spec){
     let a = buffer[JSON.stringify(spec)];
@@ -26,7 +35,26 @@ function getBuffer(spec){
 }
 
 function saveBuffer(spec, base64string) {
-    buffer[JSON.stringify(spec)] = base64string;
+    if (!buffer[JSON.stringify(spec)]) {
+        spec.counter_buffer = Object.keys(buffer).length;
+        buffer[JSON.stringify(spec)] = base64string;
+    }
+}
+
+function getLastBufferKey() {
+    let max = -1;
+    let last = {}
+
+    for (let s of Object.keys(buffer) ){
+        if (IsJsonString(s)){
+            let spec = JSON.parse(s);
+            if (spec.counter_buffer > max) {
+                max = spec.counter_buffer;
+                last = spec;
+            }
+        }
+    }
+    return JSON.stringify(last);
 }
 
 function sendVis(req, res, base64string){
@@ -166,6 +194,15 @@ web_server.get("/attributes/:dataset/", (req, res) => {
         });
     }
 });
+
+web_server.get("/save_state/", (req, res) => {
+    buffer.state_key = getLastBufferKey();
+    res.send("state saved");
+})
+
+web_server.get("/load_state/", (req, res) => {
+    sendVis(req, res, buffer[buffer.state_key]);
+})
 
 web_server.get("/generate/:dataset/chartgen.html", function(req, res) {
     console.log("Generating chart for: " + req.params.dataset);
