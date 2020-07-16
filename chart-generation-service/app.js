@@ -7,6 +7,7 @@ const bodyParser = require('body-parser'); //middleware for parsing POST requisi
 const d3 = require("d3");
 const fs = require('fs');
 
+let req_list = [];
 let  datasets = {};
 const web_port = 3000;
 let buffer = {}; // simple key value to remember requisitions
@@ -16,6 +17,11 @@ web_server.use(bodyParser.json());       // to support JSON-encoded bodies
 web_server.use(bodyParser.urlencoded({     // to support URL-encoded bodies
     extended: true
 }));
+
+function logging(r){
+    console.log(r);
+    req_list.push(r);
+}
 
 function IsJsonString(str) {
     try {
@@ -83,6 +89,7 @@ function clean_get_url(req, dataset_mode=false){
         }
 
     if (url_query["colors"]) parameters.colors = url_query["colors"].split(";");
+    if (url_query["folds"]) parameters.folds = url_query["folds"].split(";");
 
     // specific configurations - boolean values
     // value labels on visual mark
@@ -114,13 +121,30 @@ function isrequisitioncomplete(req){
     return true;
 }
 
+function getrow(req) {
+    let raw_row = datasets[req.params.dataset][req.params.row_number];
+    let row = [];
+    for (let key of datasets[req.params.dataset].columns) {
+        row.push(raw_row[key])
+    }
+    return row.map(d => d).join(",");
+}
+
+
 web_server.get('/', function (req, res) {
+    logging(req.originalUrl);
+
     res.sendFile(path.join(pages_path + '/index.html'));
 });
 
+web_server.get('/debug.txt', function (req, res) {
+    logging(req.originalUrl);
+    res.send(req_list.join("</br>"));
+});
 
 // Serving webpages
 web_server.get('/chartgen.html', function (req, res) {
+    logging(req.originalUrl);
 
     if (isrequisitioncomplete(req)) { // TODO: create function to check by chart type and requirements for each
         let params = clean_get_url(req);
@@ -146,9 +170,9 @@ web_server.get('/chartgen.html', function (req, res) {
     // }
 });
 
-
 // upload datasets
 web_server.post('/upload', function (req, res) {
+    logging(req.originalUrl);
     // console.log(req.body);
     var busboy = new Busboy({ headers: req.headers });
 
@@ -170,6 +194,8 @@ web_server.post('/upload', function (req, res) {
 
 
 web_server.get("/info.html", function(req, res) {
+    logging(req.originalUrl);
+
     fs.promises.readdir("datasets/").then( files => {
         files = files.map(d => d.slice(0,-4));
         res.send(files.join(","));
@@ -178,6 +204,7 @@ web_server.get("/info.html", function(req, res) {
 
 
 web_server.get("/attributes/:dataset/", (req, res) => {
+    logging(req.originalUrl);
 
     let dataset_name = req.params.dataset;
     let filepath = "datasets/" + dataset_name + ".csv";
@@ -196,24 +223,19 @@ web_server.get("/attributes/:dataset/", (req, res) => {
 });
 
 web_server.get("/save_state/", (req, res) => {
+    logging(req.originalUrl);
     buffer.state_key = getLastBufferKey();
     res.send("state saved");
 })
 
 web_server.get("/load_state/", (req, res) => {
+    logging(req.originalUrl);
     sendVis(req, res, buffer[buffer.state_key]);
 })
 
-function getrow(req) {
-    let raw_row = datasets[req.params.dataset][req.params.row_number];
-    let row = [];
-    for (let key of datasets[req.params.dataset].columns) {
-        row.push(raw_row[key])
-    }
-    return row.map(d => d).join(",");
-}
-
 web_server.get("/row/:dataset/:row_number", (req, res) => {
+    logging(req.originalUrl);
+
     if (datasets[req.params.dataset]) {
         res.send(getrow(req));
     } else {
@@ -227,7 +249,9 @@ web_server.get("/row/:dataset/:row_number", (req, res) => {
 })
 
 web_server.get("/generate/:dataset/chartgen.html", function(req, res) {
-    console.log("Generating chart for: " + req.params.dataset);
+    logging(req.originalUrl);
+
+    console.log("> Generating chart for: " + req.params.dataset);
     
     let vis_settings = clean_get_url(req, true);
     vis_settings.dataset_name = req.params.dataset;

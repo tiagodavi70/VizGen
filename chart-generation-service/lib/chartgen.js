@@ -88,9 +88,7 @@ const { filter } = require('underscore');
 
         // call this function to generate the charts
         async generateChart() {
-            console.log("Required: " + this.chartType);
-
-            let vllist = ["barchartvertical", "linechart", "scatterplot", "areachart"];
+            let vllist = ["barchartvertical", "linechart", "scatterplot", "areachart", "parallel_coordinates"];
             let vlspec = "";
             let spec = {};
 
