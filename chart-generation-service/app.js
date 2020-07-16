@@ -124,12 +124,12 @@ function isrequisitioncomplete(req){
 function getrow(req) {
     let raw_row = datasets[req.params.dataset][req.params.row_number];
     let row = [];
-    for (let key of datasets[req.params.dataset].columns) {
+    console.log(raw_row)
+    for (let key in raw_row) {
         row.push(raw_row[key])
     }
     return row.map(d => d).join(",");
 }
-
 
 web_server.get('/', function (req, res) {
     logging(req.originalUrl);

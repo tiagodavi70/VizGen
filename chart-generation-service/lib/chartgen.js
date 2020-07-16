@@ -39,7 +39,7 @@ const { filter } = require('underscore');
                             "w": datavector[i][settings.columns["w"]] ? datavector[i][settings.columns["w"]] : 0});
                 
             }
-        } else { // read from url
+        } else if (datavector["y"]) { // read from url
             has_x = datavector["x"] ? true : false;
             for (let i = 0 ; i < datavector["y"].length ; i++)
                 data.push({ "y": +datavector["y"][i],
@@ -131,12 +131,11 @@ const { filter } = require('underscore');
                     }
                     return d;
                 });
-                // console.log(vlspec.encoding);
-                // console.log(vlspec.data.values[0]);
             }
             else {
                 vlspec.data.values = this.data;
             }
+
             if (this.settings.filter && this.settings.filter !== "")
                 vlspec.transform = this.settings.filter.map(d => {  return {"filter": d} });
             
@@ -145,6 +144,11 @@ const { filter } = require('underscore');
             vlspec.config.legend.titleFontSize = 12;
             vlspec.config.legend.labelFontSize = 12;
 
+            if (["parallel_coordinates"].includes(this.chartType)) {
+
+            } else {
+                
+            }
             for (let axis of ["x", "y"])
                 if (vlspec.encoding[axis])
                     vlspec.encoding[axis].title = this.settings[axis+"label"];
