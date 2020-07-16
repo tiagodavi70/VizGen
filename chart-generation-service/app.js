@@ -124,7 +124,6 @@ function isrequisitioncomplete(req){
 function getrow(req) {
     let raw_row = datasets[req.params.dataset][req.params.row_number];
     let row = [];
-    console.log(raw_row)
     for (let key in raw_row) {
         row.push(raw_row[key])
     }
@@ -210,16 +209,12 @@ web_server.get("/attributes/:dataset/", (req, res) => {
     let filepath = "datasets/" + dataset_name + ".csv";
     let data = {};
 
-    if (datasets[dataset_name]) {
+    fs.readFile(filepath, "utf8", (err, data_raw) => {
+        datasets[dataset_name] = d3.csvParse(data_raw);
         data = datasets[dataset_name];
-        res.send(data.columns.join(","));
-    } else {
-        fs.readFile(filepath, "utf8", (err, data_raw) => {
-            datasets[dataset_name] = d3.csvParse(data_raw);
-            data = datasets[dataset_name];
-            res.send(Object.keys(data[0]).join(","));
-        });
-    }
+        res.send(Object.keys(data[0]).join(","));
+    });
+    
 });
 
 web_server.get("/save_state/", (req, res) => {
@@ -236,16 +231,14 @@ web_server.get("/load_state/", (req, res) => {
 web_server.get("/row/:dataset/:row_number", (req, res) => {
     logging(req.originalUrl);
 
-    if (datasets[req.params.dataset]) {
-        res.send(getrow(req));
-    } else {
-        let filepath = "datasets/" + req.params.dataset + ".csv";
-        fs.readFile(filepath, "utf8", (err, data_raw) => {
-            if (err) throw err;
-                datasets[req.params.dataset] = d3.csvParse(data_raw);
-                res.send(getrow(req))
-        });
-    }
+    
+    let filepath = "datasets/" + req.params.dataset + ".csv";
+    fs.readFile(filepath, "utf8", (err, data_raw) => {
+        if (err) throw err;
+            datasets[req.params.dataset] = d3.csvParse(data_raw);
+            res.send(getrow(req))
+    });
+
 })
 
 web_server.get("/generate/:dataset/chartgen.html", function(req, res) {
