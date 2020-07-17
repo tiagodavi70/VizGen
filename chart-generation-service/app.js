@@ -98,7 +98,7 @@ function clean_get_url(req, dataset_mode=false){
         }
 
     if (url_query["colors"]) parameters.colors = url_query["colors"].split(";");
-    if (url_query["folds"]) parameters.folds = url_query["folds"].split(";");
+    if (url_query["fold"]) parameters.fold = url_query["fold"].split(";");
 
     // specific configurations - boolean values
     // value labels on visual mark

@@ -7,7 +7,7 @@
     "height": 300,
     "transform": [
       {"window": [{"op": "count", "as": "index"}]},
-      {"fold": ["petalLength", "petalWidth", "sepalLength", "sepalWidth"]},
+      {"fold": []},
       {
         "joinaggregate": [
           {"op": "min", "field": "value", "as": "min"},
@@ -33,24 +33,11 @@
     }, {
       "mark": "line",
       "encoding": {
-        "color": {"type": "nominal", "field": "species"},
+        "color": {"type": "nominal", "field": ""},
         "detail": {"type": "nominal", "field": "index"},
         "opacity": {"value": 0.3},
         "x": {"type": "nominal", "field": "key"},
-        "y": {"type": "quantitative", "field": "norm_val", "axis": null},
-        "tooltip": [{
-          "type": "quantitative",
-          "field": "petalLength"
-        }, {
-          "type": "quantitative",
-          "field": "petalWidth"
-        }, {
-          "type": "quantitative",
-          "field": "sepalLength"
-        }, {
-          "type": "quantitative",
-          "field": "sepalWidth"
-        }]
+        "y": {"type": "quantitative", "field": "norm_val", "axis": null}
       }
     }, {
       "encoding": {
@@ -93,11 +80,20 @@
       }]
     }],
     "config": {
-      "axisX": {"domain": false, "labelAngle": 0, "tickColor": "#ccc", "title": null},
-      "view": {"stroke": null},
-      "style": {
-        "label": {"baseline": "middle", "align": "right", "dx": -5},
-        "tick": {"orient": "horizontal"}
-      }
+        "axisX": {"domain": false, "labelAngle": 0, "tickColor": "#ccc", "title": null},
+        "view": {"stroke": null},
+        "style": {
+            "label": {"baseline": "middle", "align": "right", "dx": -5},
+            "tick": {"orient": "horizontal"}
+        },
+        "background":"#FFFFFF",
+        "axis": {
+            "labelFontSize": 20,
+            "titleFontSize": 30
+        },
+        "legend": {
+            "labelFontSize": 20,
+            "titleFontSize": 30
+        }
     }
   }

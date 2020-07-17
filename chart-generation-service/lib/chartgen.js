@@ -1,5 +1,3 @@
-const { filter } = require('underscore');
-
 (function() {
 
     const isNodeJS = typeof module !== 'undefined' && typeof module.exports !== 'undefined';
@@ -46,6 +44,8 @@ const { filter } = require('underscore');
                             "x": datavector["x"] ? datavector["x"][i] : i,
                             "z": datavector["z"] ? datavector["z"][i] : 0,
                             "w": datavector["w"] ? datavector["w"][i] : 0});
+        } else {
+
         }
         settings.xlabel = has_x || !settings.xlabel ? settings.xlabel : "index"; // if auto-index is used and do not have label 
         
@@ -102,7 +102,7 @@ const { filter } = require('underscore');
             }
             vlspec.title = {"text": this.settings["title"], "fontSize": 20};
             
-            if (!_.isEmpty(this.settings.columns)){
+            if (!_.isEmpty(this.settings.columns) && _.isEmpty(this.settings.fold)){
                 vlspec.data.values = this.settings.data;
                 for (let i = 0 ; i < this.data.length ; i++)
                     vlspec.data.values[i].index = i;
@@ -132,7 +132,18 @@ const { filter } = require('underscore');
                     return d;
                 });
             }
-            else {
+            else if (!_.isEmpty(this.settings.fold)){
+                vlspec.data.values = this.settings.data.map(d => {
+                    let a = {}
+                    for (let k in d) {
+                        if (this.settings.fold.includes(k)){
+                            a[k] = +d[k]
+                        }
+                    }
+                    a[this.settings.columns.z] = d[this.settings.columns.z];
+                    return a;
+                });
+            } else {
                 vlspec.data.values = this.data;
             }
 
@@ -143,39 +154,43 @@ const { filter } = require('underscore');
             vlspec.config.axis.labelFontSize = 12;
             vlspec.config.legend.titleFontSize = 12;
             vlspec.config.legend.labelFontSize = 12;
-
-            if (["parallel_coordinates"].includes(this.chartType)) {
-
-            } else {
-                
-            }
-            for (let axis of ["x", "y"])
+            
+            // http://localhost:3000/generate/iris/chartgen.html?chart=parallel_coordinates&fold=sepal_length;sepal_width;petal_width;petal_length&z=iris&title=Iris
+            
+            if (!["parallel_coordinates"].includes(this.chartType) && _.isEmpty(this.settings.fold)){
+                for (let axis of ["x", "y"])
                 if (vlspec.encoding[axis])
                     vlspec.encoding[axis].title = this.settings[axis+"label"];
-            
-            let data_extent = d3.extent(this.data, (d) => d["y"])
-            let diff = (data_extent[1] - data_extent[0]) * 0.05;
-            data_extent[0] -= diff;
-            data_extent[1] += diff;
-            vlspec.encoding.y.scale = {"domain": data_extent } 
-            
-            let vlaxis = ["color","size"];
-            let extradim = ["z","w"];
-            for (let i = 0 ; i < vlaxis.length ; i++)
-                if (vlspec.encoding[vlaxis[i]])
-                    vlspec.encoding[vlaxis[i]].title = this.settings[extradim[i]+"label"];
+                
+                let data_extent = d3.extent(this.data, (d) => d["y"])
+                let diff = (data_extent[1] - data_extent[0]) * 0.05;
+                data_extent[0] -= diff;
+                data_extent[1] += diff;
+                vlspec.encoding.y.scale = {"domain": data_extent } 
+                
+                let vlaxis = ["color","size"];
+                let extradim = ["z","w"];
+                for (let i = 0 ; i < vlaxis.length ; i++)
+                    if (vlspec.encoding[vlaxis[i]])
+                        vlspec.encoding[vlaxis[i]].title = this.settings[extradim[i]+"label"];
 
-            if (this.settings["colors"]){
-                // single color encondings
-                if (this.chartType === "barchartvertical") {
-                    vlspec.encoding.color.value = this.settings["colors"];
+                if (this.settings["colors"]){
+                    // single color encondings
+                    if (this.chartType === "barchartvertical") {
+                        vlspec.encoding.color.value = this.settings["colors"];
+                    }
+                    vlspec.encoding.color.scale = {"range" : this.settings["colors"]};
                 }
-                vlspec.encoding.color.scale = {"range" : this.settings["colors"]};
+                vlspec.config.background = this.settings["background"] ? this.settings["background"] : vlspec.config.background;
+                spec = vl.compile(vlspec).spec;
+            } else {
+                // vlspec.transform[1].fold = this.settings.fold;
+                console.log(this.settings.columns.z)
+                console.log(vlspec.layer[1].encoding)
+                // vlspec.layer[1].encoding.color.field = this.settings.columns.z;
+                spec = vl.compile(vlspec).spec;
             }
-            vlspec.config.background = this.settings["background"] ? this.settings["background"] : vlspec.config.background;
-            spec = vl.compile(vlspec).spec;
-            let filter_transform = spec.data[1];
-
+            
             if (!isvlspec) {
                 spec = await vega.loader().load(specfilepath);
                 spec = JSON.parse(spec);
@@ -198,22 +213,9 @@ const { filter } = require('underscore');
                     spec.scales[0].domain.field = this.settings.columns["x"];
                 }
 
-                // console.log(filter_transform.transform);
-                // filter_transform.transform.forEach(d => {
-                //     spec.data[0].transform.push(d);
-                // })
+                let filter_transform = spec.data[1];
                 filter_transform.transform.push(spec.data[0].transform[0]);
                 spec.data[0].transform = filter_transform.transform;
-
-                // console.log(spec.data[0].transform);
-                // console.log(spec.marks[0].encode.enter);
-                // console.log(spec.scales[0].domain);
-
-                // if (this.chartType === "piechart") {
-				// 	spec.scales[0].range = this.settings["colors"] ? this.settings["colors"] : spec.scales[0].range;
-                // }
-				
-				// spec.background = this.settings["background"] ? this.settings["background"] : spec.background;
                 spec.title = this.settings["title"];
             }
             return this.render(spec); // returns svg or base64 string for node, vega.view for web
