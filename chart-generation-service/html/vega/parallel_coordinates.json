@@ -7,7 +7,7 @@
     "height": 300,
     "transform": [
       {"window": [{"op": "count", "as": "index"}]},
-      {"fold": []},
+      {"fold": ["__","__"]},
       {
         "joinaggregate": [
           {"op": "min", "field": "value", "as": "min"},
@@ -33,7 +33,7 @@
     }, {
       "mark": "line",
       "encoding": {
-        "color": {"type": "nominal", "field": ""},
+        "color": {"type": "nominal", "field": "__"},
         "detail": {"type": "nominal", "field": "index"},
         "opacity": {"value": 0.3},
         "x": {"type": "nominal", "field": "key"},

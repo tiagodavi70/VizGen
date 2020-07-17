@@ -134,14 +134,12 @@
             }
             else if (!_.isEmpty(this.settings.fold)){
                 vlspec.data.values = this.settings.data.map(d => {
-                    let a = {}
                     for (let k in d) {
                         if (this.settings.fold.includes(k)){
-                            a[k] = +d[k]
+                            d[k] = +d[k]
                         }
                     }
-                    a[this.settings.columns.z] = d[this.settings.columns.z];
-                    return a;
+                    return d;
                 });
             } else {
                 vlspec.data.values = this.data;
@@ -184,10 +182,8 @@
                 vlspec.config.background = this.settings["background"] ? this.settings["background"] : vlspec.config.background;
                 spec = vl.compile(vlspec).spec;
             } else {
-                // vlspec.transform[1].fold = this.settings.fold;
-                console.log(this.settings.columns.z)
-                console.log(vlspec.layer[1].encoding)
-                // vlspec.layer[1].encoding.color.field = this.settings.columns.z;
+                vlspec.transform[1].fold = this.settings.fold;
+                vlspec.layer[1].encoding.color.field = this.settings.columns.z;
                 spec = vl.compile(vlspec).spec;
             }
             
