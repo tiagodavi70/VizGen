@@ -71,6 +71,15 @@ function sendVis(req, res, base64string){
         res.send(base64string);
 }
 
+function sendVisImg(res, base64string){
+    let img = Buffer.from(base64string, 'base64');
+    res.writeHead(200, {
+        'Content-Type': 'image/png',
+        'Content-Length': img.length
+    });
+    res.end(img);
+}
+
 function clean_get_url(req, dataset_mode=false){
     // console.log(req.query);
     let url_query = req.query;
@@ -127,7 +136,7 @@ function getrow(req) {
     for (let key in raw_row) {
         row.push(raw_row[key])
     }
-    return row.map(d => d).join(",");
+    return row.join(",");
 }
 
 web_server.get('/', function (req, res) {
@@ -153,7 +162,7 @@ web_server.get('/chartgen.html', function (req, res) {
             sendVis(req, res, buffer_image);
         } else {
             let chartgen = new ChartGenerator(params);
-            chartgen.generateChart().then((base64string) => {
+            chartgen.generateChart().then( base64string => {
                 sendVis(req, res, base64string);
                 saveBuffer(params, base64string);
             }).catch((err) => {
@@ -163,10 +172,29 @@ web_server.get('/chartgen.html', function (req, res) {
     } else {
         res.send("Wrong requisition"); // TODO: handle error message by chart type
     }
-    
-    // else {
-    //     res.sendFile(path.join(pages_path + req.url));
-    // }
+});
+
+web_server.get('/chartgen.png', function (req, res) {
+    logging(req.originalUrl);
+
+    if (isrequisitioncomplete(req)) { // TODO: create function to check by chart type and requirements for each
+        let params = clean_get_url(req);
+
+        let buffer_image = getBuffer(params);
+        if (buffer_image){
+            sendVis(req, res, buffer_image);
+        } else {
+            let chartgen = new ChartGenerator(params);
+            chartgen.generateChart().then(base64string => {
+                sendVisImg(res, base64string);
+                saveBuffer(params, base64string);
+            }).catch((err) => {
+                console.error(err);
+            });
+        }
+    } else {
+        res.send("Wrong requisition"); // TODO: handle error message by chart type
+    }
 });
 
 // upload datasets
@@ -275,6 +303,49 @@ web_server.get("/generate/:dataset/chartgen.html", function(req, res) {
                     let chartgen = new ChartGenerator(vis_settings);
                     chartgen.generateChart().then((base64string) => {
                         sendVis(req, res, base64string);
+                        saveBuffer(vis_settings, base64string);
+                    }).catch((err) => {
+                        console.error(err);
+                    });
+            });
+        }
+    } 
+});
+
+web_server.get("/generate/:dataset/chartgen.png", function(req, res) {
+    logging(req.originalUrl);
+
+    console.log("> Generating chart for: " + req.params.dataset);
+    
+    let vis_settings = clean_get_url(req, true);
+    vis_settings.dataset_name = req.params.dataset;
+    
+    let buffer_image = getBuffer(vis_settings);
+    if (buffer_image) {
+        sendVis(req, res, buffer_image);
+    } else {
+        let filepath = "datasets/" + req.params.dataset + ".csv";
+        
+        if (datasets[req.params.dataset]) {
+            vis_settings.data = datasets[req.params.dataset];
+            
+            let chartgen = new ChartGenerator(vis_settings);
+            chartgen.generateChart().then((base64string) => {
+                sendVisImg(res, base64string);
+                saveBuffer(vis_settings, base64string);
+            }).catch((err) => {
+                console.error(err);
+            });
+        } else {
+            fs.readFile(filepath, "utf8", (err, data_raw) => {
+                if (err) throw err;
+                
+                    vis_settings.data = d3.csvParse(data_raw);
+                    datasets[req.params.dataset] = vis_settings.data;
+    
+                    let chartgen = new ChartGenerator(vis_settings);
+                    chartgen.generateChart().then((base64string) => {
+                        sendVisImg(res, base64string);
                         saveBuffer(vis_settings, base64string);
                     }).catch((err) => {
                         console.error(err);
