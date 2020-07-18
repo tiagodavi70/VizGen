@@ -1,0 +1,23 @@
+{
+    "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
+    "data": {"values":[]},
+    "mark": "rect",
+    "encoding": {
+        "x": {"field": "___", "type": "nominal"},
+        "y": {"field": "___", "type": "nominal"},
+        "color": {"aggregate": "count", "field": "___", "type": "quantitative"}
+    },
+    "config": {
+        "axis": {"grid": true,
+            "tickBand": "extent",
+            "labelFontSize": 20,
+            "titleFontSize": 30
+        },
+        "background":"#FFFFFF",
+        "legend": {
+            "labelFontSize": 20,
+            "titleFontSize": 30
+        }
+    }
+  }
+  

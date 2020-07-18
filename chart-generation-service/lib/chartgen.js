@@ -88,7 +88,7 @@
 
         // call this function to generate the charts
         async generateChart() {
-            let vllist = ["barchartvertical", "linechart", "scatterplot", "areachart", "parallel_coordinates"];
+            let vllist = ["barchartvertical", "linechart", "scatterplot", "areachart", "parallel_coordinates", "heatmap"];
             let vlspec = "";
             let spec = {};
 
@@ -102,7 +102,7 @@
             }
             vlspec.title = {"text": this.settings["title"], "fontSize": 20};
             
-            if (!_.isEmpty(this.settings.columns) && _.isEmpty(this.settings.fold)){
+            if (!_.isEmpty(this.settings.columns) && !["parallel_coordinates"].includes(this.chartType)){
                 vlspec.data.values = this.settings.data;
                 for (let i = 0 ; i < this.data.length ; i++)
                     vlspec.data.values[i].index = i;
@@ -125,14 +125,15 @@
                 }
                 
                 vlspec.data.values = vlspec.data.values.map(d => {
-                    d[this.settings.columns.y] = +d[this.settings.columns.y]; 
+                    if (this.chartType !== "heatmap")
+                        d[this.settings.columns.y] = +d[this.settings.columns.y]; 
                     if (this.chartType === "scatterplot") {
                         d[this.settings.columns.x] = +d[this.settings.columns.x]; 
                     }
                     return d;
                 });
             }
-            else if (!_.isEmpty(this.settings.fold)){
+            else if (!_.isEmpty(this.settings.fold) && this.chartType === "parallel_coordinates"){
                 vlspec.data.values = this.settings.data.map(d => {
                     for (let k in d) {
                         if (this.settings.fold.includes(k)){
@@ -141,6 +142,8 @@
                     }
                     return d;
                 });
+            } else if (this.chartType === "heatmap") {
+                vlspec.data.values = this.settings.data;
             } else {
                 vlspec.data.values = this.data;
             }
@@ -155,7 +158,7 @@
             
             // http://localhost:3000/generate/iris/chartgen.html?chart=parallel_coordinates&fold=sepal_length;sepal_width;petal_width;petal_length&z=iris&title=Iris
             
-            if (!["parallel_coordinates"].includes(this.chartType) && _.isEmpty(this.settings.fold)){
+            if (!["parallel_coordinates","heatmap"].includes(this.chartType) && _.isEmpty(this.settings.fold)){
                 for (let axis of ["x", "y"])
                 if (vlspec.encoding[axis])
                     vlspec.encoding[axis].title = this.settings[axis+"label"];
@@ -171,6 +174,7 @@
                 for (let i = 0 ; i < vlaxis.length ; i++)
                     if (vlspec.encoding[vlaxis[i]])
                         vlspec.encoding[vlaxis[i]].title = this.settings[extradim[i]+"label"];
+            
 
                 if (this.settings["colors"]){
                     // single color encondings
@@ -182,9 +186,15 @@
                 vlspec.config.background = this.settings["background"] ? this.settings["background"] : vlspec.config.background;
                 spec = vl.compile(vlspec).spec;
             } else {
-                vlspec.transform[1].fold = this.settings.fold;
-                vlspec.layer[1].encoding.color.field = this.settings.columns.z;
-                spec = vl.compile(vlspec).spec;
+                if (this.chartType === "parallel_coordinates"){
+                    vlspec.transform[1].fold = this.settings.fold;
+                    vlspec.layer[1].encoding.color.field = this.settings.columns.z;
+                    spec = vl.compile(vlspec).spec;
+                } else if (this.chartType === "heatmap") {
+                    // previously deleted
+                    vlspec.encoding["color"] = {"aggregate": "count", "field": this.settings.columns.x, "type": "quantitative"};
+                    spec = vl.compile(vlspec).spec;
+                }
             }
             
             if (!isvlspec) {
@@ -209,6 +219,7 @@
                     spec.scales[0].domain.field = this.settings.columns["x"];
                 }
 
+                // console.log(spec.data);
                 let filter_transform = spec.data[1];
                 filter_transform.transform.push(spec.data[0].transform[0]);
                 spec.data[0].transform = filter_transform.transform;
