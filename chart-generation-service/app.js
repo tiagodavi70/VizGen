@@ -269,6 +269,19 @@ web_server.get("/row/:dataset/:row_number", (req, res) => {
 
 })
 
+web_server.get("/field/:dataset/:field", (req, res) => {
+    logging(req.originalUrl);
+    
+    let filepath = "datasets/" + req.params.dataset + ".csv";
+    fs.readFile(filepath, "utf8", (err, data_raw) => {
+        if (err) throw err;
+            datasets[req.params.dataset] = d3.csvParse(data_raw);
+            
+            res.send(datasets[req.params.dataset].map(d => d[req.params.field]).join(","))
+    });
+})
+
+
 web_server.get("/generate/:dataset/chartgen.html", function(req, res) {
     logging(req.originalUrl);
 
