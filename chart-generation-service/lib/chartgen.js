@@ -196,7 +196,8 @@
                     spec = vl.compile(vlspec).spec;
                 }
             }
-            
+            let filter_transform = spec.data[1];
+
             if (!isvlspec) {
                 spec = await vega.loader().load(specfilepath);
                 spec = JSON.parse(spec);
@@ -218,11 +219,13 @@
                     spec.marks[0].encode.enter.fill.field = this.settings.columns["x"];
                     spec.scales[0].domain.field = this.settings.columns["x"];
                 }
-
-                // console.log(spec.data);
-                let filter_transform = spec.data[1];
                 filter_transform.transform.push(spec.data[0].transform[0]);
                 spec.data[0].transform = filter_transform.transform;
+
+                // console.log(spec.data);
+                // let filter_transform = spec.data[1];
+                // filter_transform.transform.push(spec.data[0].transform[0]);
+                // spec.data[0].transform = filter_transform.transform;
                 spec.title = this.settings["title"];
             }
             return this.render(spec); // returns svg or base64 string for node, vega.view for web
