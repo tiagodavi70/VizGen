@@ -204,13 +204,14 @@
                 // spec.data[0].values = this.settings.data;
                 // console.log(this.settings.data[0])
 
+                this.settings.data.forEach(d => d.pie = 1)
                 if (!_.isEmpty(this.settings.columns)) {
                     spec.data[0] =
                     {   "name":"data_0",
                         "values": this.settings.data,
                         "transform":[{
                             "type": "aggregate",
-                            "fields":[this.settings.columns["y"]],
+                            "fields":["pie"],
                             "groupby": [this.settings.columns["x"]],
                             "ops": ["sum"],
                             "as": ["sum"],
