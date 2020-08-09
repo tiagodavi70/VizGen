@@ -223,10 +223,6 @@
                 filter_transform.transform.push(spec.data[0].transform[0]);
                 spec.data[0].transform = filter_transform.transform;
 
-                // console.log(spec.data);
-                // let filter_transform = spec.data[1];
-                // filter_transform.transform.push(spec.data[0].transform[0]);
-                // spec.data[0].transform = filter_transform.transform;
                 spec.title = this.settings["title"];
             }
             return this.render(spec); // returns svg or base64 string for node, vega.view for web

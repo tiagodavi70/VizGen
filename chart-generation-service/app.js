@@ -19,6 +19,8 @@ web_server.use(bodyParser.urlencoded({     // to support URL-encoded bodies
 }));
 
 function logging(r){
+    console.log("start: " + (+ new Date()))
+    req_list.push("start: " + (+ new Date()))
     console.log(r);
     req_list.push(r);
 }
@@ -69,6 +71,7 @@ function sendVis(req, res, base64string){
             "<img src='data:image/png;base64," + base64string + "' alt='generated chart'/>");
     else
         res.send(base64string);
+    console.log("finish: " + (+ new Date()))
 }
 
 function sendVisImg(res, base64string){
@@ -219,7 +222,6 @@ web_server.post('/upload', function (req, res) {
     return req.pipe(busboy);
 });
 
-
 web_server.get("/info.html", function(req, res) {
     logging(req.originalUrl);
 
@@ -228,7 +230,6 @@ web_server.get("/info.html", function(req, res) {
         res.send(files.join(","));
     })
 });
-
 
 web_server.get("/attributes/:dataset/", (req, res) => {
     logging(req.originalUrl);
@@ -263,8 +264,9 @@ web_server.get("/row/:dataset/:row_number", (req, res) => {
     let filepath = "datasets/" + req.params.dataset + ".csv";
     fs.readFile(filepath, "utf8", (err, data_raw) => {
         if (err) throw err;
-            datasets[req.params.dataset] = d3.csvParse(data_raw);
-            res.send(getrow(req))
+
+        datasets[req.params.dataset] = d3.csvParse(data_raw);
+        res.send(getrow(req))
     });
 
 })
@@ -281,7 +283,6 @@ web_server.get("/field/:dataset/:field", (req, res) => {
     });
 })
 
-
 web_server.get("/generate/:dataset/chartgen.html", function(req, res) {
     logging(req.originalUrl);
 
@@ -296,7 +297,7 @@ web_server.get("/generate/:dataset/chartgen.html", function(req, res) {
     } else {
         let filepath = "datasets/" + req.params.dataset + ".csv";
         
-        if (datasets[req.params.dataset]) {
+        if (datasets[req.params.dataset] && false) {
             vis_settings.data = datasets[req.params.dataset];
             
             let chartgen = new ChartGenerator(vis_settings);
@@ -339,7 +340,7 @@ web_server.get("/generate/:dataset/chartgen.png", function(req, res) {
     } else {
         let filepath = "datasets/" + req.params.dataset + ".csv";
         
-        if (datasets[req.params.dataset]) {
+        if (datasets[req.params.dataset] && false) {
             vis_settings.data = datasets[req.params.dataset];
             
             let chartgen = new ChartGenerator(vis_settings);
