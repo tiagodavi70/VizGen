@@ -14,7 +14,15 @@ data = [{
             "x2": "sepal_width",
             "y1": "petal_length",
             "y2": "petal_width"
-        }]
+        },
+        {
+            "dataset":"generated", 
+            "x1": "Dimension_3",
+            "x2": "Dimension_4",
+            "y1": "Dimension_1",
+            "y2": "Dimension_2"
+        }
+        ]
 
 count_total = 0
 for i in [100, 500, 1000, 5000]:
@@ -41,6 +49,20 @@ for i in [100, 500, 1000, 5000]:
 print("total", count_total/7, count_total)
 
 # summary - two datasets
+# cars 100 700
+# iris 100 700
+# generated 100 700
+# cars 500 3500
+# iris 500 3500
+# generated 500 3500
+# cars 1000 7000
+# iris 1000 7000
+# generated 1000 7000
+# cars 5000 35000
+# iris 5000 35000
+# generated 5000 35000
+# total 19800 138600
+
 # cars 100 700
 # iris 100 700
 # cars 500 3500
