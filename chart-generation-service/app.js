@@ -7,6 +7,9 @@ const bodyParser = require('body-parser'); //middleware for parsing POST requisi
 const d3 = require("d3");
 const fs = require('fs');
 
+// wget -O/dev/null -i lists/links_5000.txt
+// node app.js --max-old-space-size=70000 > outputs_evaluation/list_5000.txt
+
 let req_list = [];
 let  datasets = {};
 const web_port = 3000;
@@ -43,6 +46,7 @@ function getBuffer(spec){
 }
 
 function saveBuffer(spec, base64string) {
+    return 
     if (!buffer[JSON.stringify(spec)]) {
         spec.counter_buffer = Object.keys(buffer).length;
         buffer[JSON.stringify(spec)] = base64string;
@@ -297,7 +301,7 @@ web_server.get("/generate/:dataset/chartgen.html", function(req, res) {
     } else {
         let filepath = "datasets/" + req.params.dataset + ".csv";
         
-        if (datasets[req.params.dataset] && false) {
+        if (datasets[req.params.dataset] ) {
             vis_settings.data = datasets[req.params.dataset];
             
             let chartgen = new ChartGenerator(vis_settings);

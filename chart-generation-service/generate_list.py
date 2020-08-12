@@ -15,17 +15,17 @@ data = [{
             "y1": "petal_length",
             "y2": "petal_width"
         },
-        {
-            "dataset":"generated", 
-            "x1": "Dimension_3",
-            "x2": "Dimension_4",
-            "y1": "Dimension_1",
-            "y2": "Dimension_2"
-        }
+        # {
+        #     "dataset":"generated", 
+        #     "x1": "Dimension_3",
+        #     "x2": "Dimension_4",
+        #     "y1": "Dimension_1",
+        #     "y2": "Dimension_2"
+        # }
         ]
 
 count_total = 0
-for i in [100, 500, 1000, 5000]:
+for i in [100, 500, 1000, 2000, 3000, 4000, 5000]:
     links = ""
     for d in data:
         url_base = "http://localhost:3000/generate/"
@@ -69,6 +69,12 @@ print("total", count_total/7, count_total)
 # iris 500 3500
 # cars 1000 7000
 # iris 1000 7000
+# cars 2000 14000
+# iris 2000 14000
+# cars 3000 21000
+# iris 3000 21000
+# cars 4000 28000
+# iris 4000 28000
 # cars 5000 35000
 # iris 5000 35000
-# total 13200 92400
+# total 31200 218400
