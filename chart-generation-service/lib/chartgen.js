@@ -59,16 +59,17 @@
             this.data = formaturlvector(settings);
             
             this.settings = settings;
-            this.selector = selector;
+            this.selector = settings.svg ? "svg" : "canvas";
             this.path = isNodeJS ? "./html/vega/" : "./vega";
-
+			
+			console.log(settings.svg, this.selector)
             if (isNodeJS) {
                 const fs = require('fs');
                 this.render = async function(spec) {
                     let view = new vega.View(vega.parse(spec))
                         .renderer('svg')        // set renderer (canvas or svg)
                         .initialize();
-                    if (selector === "svg")
+                    if (this.selector === "svg")
                         return await view.toSVG().catch((err) => {console.error(err);}); // return svg string
 
                     let canvas =  await view.toCanvas().catch((err) => {console.error(err);}); // return canvas stream
@@ -101,7 +102,7 @@
                 vlspec = JSON.parse(fs.readFileSync(this.path + "barchartvertical" + ".json").toString());
             }
             vlspec.title = {"text": this.settings["title"], "fontSize": 20};
-            
+            // console.log(this.settings)
             if (!_.isEmpty(this.settings.columns) && !["parallel_coordinates"].includes(this.chartType)){
                 vlspec.data.values = this.settings.data;
                 for (let i = 0 ; i < this.data.length ; i++)
@@ -167,7 +168,7 @@
                 let diff = (data_extent[1] - data_extent[0]) * 0.05;
                 data_extent[0] -= diff;
                 data_extent[1] += diff;
-                vlspec.encoding.y.scale = {"domain": data_extent } 
+                //vlspec.encoding.y.scale = {"domain": data_extent } 
                 
                 let vlaxis = ["color","size"];
                 let extradim = ["z","w"];
@@ -201,8 +202,8 @@
             if (!isvlspec) {
                 spec = await vega.loader().load(specfilepath);
                 spec = JSON.parse(spec);
-                // spec.data[0].values = this.settings.data;
-                // console.log(this.settings.data[0])
+                //spec.data[0].values = this.settings.data;
+                 console.log(this.settings.data[0])
 
                 this.settings.data.forEach(d => d.pie = 1)
                 if (!_.isEmpty(this.settings.columns)) {
@@ -229,7 +230,7 @@
         };
 
         static debug() {
-            return 'debug ';
+            return 'debug';
         }
     }
 

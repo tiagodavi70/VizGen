@@ -23,7 +23,7 @@ Two modes are available for this module, one in the browser, available with a `s
 The `canvas` dependency causes some dependency errors on some windows machines. Follow [this link](https://github.com/Automattic/node-canvas/wiki/Installation:-Windows) to solve this problem.
 
 
-### Requests
+### GET Requests
 
 The interface of requests is done by the URL, on GET requisitions. The basic structure is as follows:  
 ```bash
@@ -36,8 +36,65 @@ http://localhost:3000/chartgen.html?x=$KEYS&y=$VALUES&z=$CATEGORIES&chart=$CHART
 
 This structure can be different from one chart to another, see [below](#Examples)
 
+**Important:** the `svg` tag . Example: `http://localhost:3000/chartgen.html?x=orange,pear,pineapple,strawberry&y=1,2,3,4&chart=barchartvertical&title=title&svg=true`
 
-## Examples
+## General
+
+Return a string containing the names of the datasets currently stored in the server.
+``` bash
+http://localhost:3000/info.html
+```
+
+Save the last request executed in the server
+```bash
+http://localhost:3000/save_state
+```
+
+Load the saved request 
+```bash
+http://localhost:3000/load_state
+```
+
+Return a log of all requests made in the active server session
+``` bash
+http://localhost:3000/debug.txt
+```
+
+## Dataset Requisitions
+
+Return a string containing all the values in the specified row
+``` bash
+http://localhost:3000/row/<datasetName>/<rowIndex(integer)>
+```
+
+Return a string containing all the values in the specified column
+``` bash
+http://localhost:3000/field/<datasetName>/<attributeName>
+```
+
+Return a string containing the names of the attributes present in the dataset 
+``` bash
+http://localhost:3000/attributes/<datasetName>
+```
+
+## Using datasets
+
+Return a base64 string containing a generated visualization image. Visualization types accepted: barchart, piechart, linechart, scatterplot, and heatmap; Supports the same parameters as the command without a dataset.
+``` bash
+http://localhost:3000/generate/<datasetName>/chartgen.html?chart=<visType>&title=<titleString>&x=<xAttribute>&y=<yAttribute>
+```
+
+Return a parallel coordinates visualization as a base64 string; Fold attribute is a set of numerical columns.
+``` bash
+http://localhost:3000/generate/<datasetName>/chartgen.html?chart=parallel_coordinates&fold=<attribute1>;<attribute2>;<attribute3>;<attribute4>&z=<colorAttribute>&title=<titleString>
+```
+
+Filter adds a group of values to be filtered in the dataset when generating a visualization. Valid predicates: equal, lt, lte, gt, gte, range, oneOf. Same as in [vegas predicates](https://vega.github.io/vega-lite/docs/predicate.html)
+``` bash
+http://localhost:3000/generate/<datasetName>/chartgen.html?x=<xAttribute>&y=<yAttribute>&z=<zAttribute>&chart=<visType>&title=<titleString>&xlabel=<xLabelString>&ylabel=<yLabelString>&zlabel=<zLabelString>&filter=[{"field": "<attributeName>", "<fieldPredicate>": ["<valueString>"]}, {"field": "<attributeName>", "<fieldPredicate>": ["<valueString>"]}]
+```
+
+## Examples for GET Requisitions
 
 All these examples assume a server running on default settings.
 

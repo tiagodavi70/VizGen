@@ -66,9 +66,12 @@ function getLastBufferKey() {
 }
 
 function sendVis(req, res, base64string){
+	console.log(req)
     if (!req.headers['user-agent'].includes("Unity"))
-        res.send("<title> Generated Chart </title>" +
-            "<img src='data:image/png;base64," + base64string + "' alt='generated chart'/>");
+		if (!req.query.svg)
+			res.send("<title> Generated Chart </title>" +
+				"<img src='data:image/png;base64," + base64string + "' alt='generated chart'/>");
+		else res.send(base64string);
     else
         res.send(base64string);
     console.log("finish: " + (+ new Date()))
@@ -105,8 +108,8 @@ function clean_get_url(req, dataset_mode=false){
 
     // specific configurations - boolean values
     // value labels on visual mark
-    for (let key of ["sort"] )
-        parameters[key] = url_query[key] === true;
+    for (let key of ["sort", "svg"] )
+        parameters[key] = url_query[key] == "true";
 
     // specific configurations - categoric or single color values
     for (let key of ["interpolation", "title", "xlabel", "ylabel", "zlabel", "wlabel", "background"] )
