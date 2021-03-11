@@ -24,7 +24,6 @@ web_server.use(bodyParser.urlencoded({     // to support URL-encoded bodies
 function logging(r){
     console.log("start: " + (+ new Date()))
     req_list.push("start: " + (+ new Date()))
-    console.log(r);
     req_list.push(r);
 }
 
@@ -46,7 +45,6 @@ function getBuffer(spec){
 }
 
 function saveBuffer(spec, base64string) {
-    return 
     if (!buffer[JSON.stringify(spec)]) {
         spec.counter_buffer = Object.keys(buffer).length;
         buffer[JSON.stringify(spec)] = base64string;
@@ -70,12 +68,14 @@ function getLastBufferKey() {
 }
 
 function sendVis(req, res, base64string){
-	console.log(req)
+	// console.log(req)
     if (!req.headers['user-agent'].includes("Unity"))
-		if (!req.query.svg)
-			res.send("<title> Generated Chart </title>" +
-				"<img src='data:image/png;base64," + base64string + "' alt='generated chart'/>");
-		else res.send(base64string);
+		if (!req.query.svg) {
+            if (!req.query.base64)
+                res.send("<title> Generated Chart </title>" +
+                    "<img src='data:image/png;base64," + base64string + "' alt='generated chart'/>");
+		    else res.send(base64string);
+        }
     else
         res.send(base64string);
     console.log("finish: " + (+ new Date()))
@@ -112,7 +112,7 @@ function clean_get_url(req, dataset_mode=false){
 
     // specific configurations - boolean values
     // value labels on visual mark
-    for (let key of ["sort", "svg"] )
+    for (let key of ["sort", "svg", "base64"] )
         parameters[key] = url_query[key] == "true";
 
     // specific configurations - categoric or single color values

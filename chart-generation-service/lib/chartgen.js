@@ -62,7 +62,7 @@
             this.selector = settings.svg ? "svg" : "canvas";
             this.path = isNodeJS ? "./html/vega/" : "./vega";
 			
-			console.log(settings.svg, this.selector)
+			// console.log(settings.svg, this.selector)
             if (isNodeJS) {
                 const fs = require('fs');
                 this.render = async function(spec) {
