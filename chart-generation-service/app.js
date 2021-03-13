@@ -71,13 +71,21 @@ function sendVis(req, res, base64string){
 	// console.log(req)
     if (!req.headers['user-agent'].includes("Unity"))
 		if (!req.query.svg) {
-            if (!req.query.base64)
+            if (!req.query.base64) {
+                console.log("<title> Generated Chart </title>" +
+                "<img src='data:image/png;base64," + base64string + "' alt='generated chart'/>");
                 res.send("<title> Generated Chart </title>" +
                     "<img src='data:image/png;base64," + base64string + "' alt='generated chart'/>");
-		    else res.send(base64string);
+            }
+		    else {
+                console.log(base64string)
+                res.send(base64string);
+            }
         }
-    else
+    else {
+        console.log(base64string)
         res.send(base64string);
+    }
     console.log("finish: " + (+ new Date()))
 }
 
