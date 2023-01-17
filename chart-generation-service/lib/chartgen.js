@@ -150,7 +150,7 @@
             }
 
             if (this.settings.filter && this.settings.filter !== "")
-                vlspec.transform = this.settings.filter.map(d => {  return {"filter": d} });
+                vlspec.transform = this.settings.filter.map(d => { return {"filter": d} });
             
             vlspec.config.axis.titleFontSize = 12;
             vlspec.config.axis.labelFontSize = 12;
@@ -164,6 +164,9 @@
                 if (vlspec.encoding[axis])
                     vlspec.encoding[axis].title = this.settings[axis+"label"];
                 
+                if (this.settings["sort"])
+                    vlspec.encoding["y"].sort = "ascending";
+
                 let data_extent = d3.extent(this.data, (d) => d["y"])
                 let diff = (data_extent[1] - data_extent[0]) * 0.05;
                 data_extent[0] -= diff;
@@ -226,6 +229,7 @@
 
                 spec.title = this.settings["title"];
             }
+            // console.log(JSON.stringify(spec))
             return this.render(spec); // returns svg or base64 string for node, vega.view for web
         };
 

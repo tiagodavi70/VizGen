@@ -78,15 +78,13 @@ function sendVis(req, res, base64string){
                     "<img src='data:image/png;base64," + base64string + "' alt='generated chart'/>");
             }
 		    else {
-                console.log(base64string)
                 res.send(base64string);
             }
         }
     else {
-        console.log(base64string)
         res.send(base64string);
     }
-    console.log("finish: " + (+ new Date()))
+    console.log("finish: " + (+ new Date()));
 }
 
 function sendVisImg(res, base64string){
@@ -135,6 +133,7 @@ function clean_get_url(req, dataset_mode=false){
     for (let key of ["inner", "padding"] )
         if (url_query[key]) parameters[key] = +url_query[key];
     
+    console.log(url_query["filter"])
     if (url_query["filter"])
         parameters["filter"] = JSON.parse(url_query["filter"].split(' ').join(''))
 
