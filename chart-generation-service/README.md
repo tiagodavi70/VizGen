@@ -89,7 +89,9 @@ Return a parallel coordinates visualization as a base64 string; Fold attribute i
 http://localhost:3000/generate/<datasetName>/chartgen.html?chart=parallel_coordinates&fold=<attribute1>;<attribute2>;<attribute3>;<attribute4>&z=<colorAttribute>&title=<titleString>
 ```
 
-Filter adds a group of values to be filtered in the dataset when generating a visualization. Valid predicates: equal, lt, lte, gt, gte, range, oneOf. Same as in [vegas predicates](https://vega.github.io/vega-lite/docs/predicate.html)
+## Other options
+
+Filter adds a group of values to be filtered in the dataset when generating a visualization. Valid predicates: `equal`, `lt`, `lte`, `gt`, `gte`, `range`, `oneOf`. Same as in [vegas predicates](https://vega.github.io/vega-lite/docs/predicate.html).
 ``` bash
 http://localhost:3000/generate/<datasetName>/chartgen.html?x=<xAttribute>&y=<yAttribute>&z=<zAttribute>&chart=<visType>&title=<titleString>&xlabel=<xLabelString>&ylabel=<yLabelString>&zlabel=<zLabelString>&filter=[{"field": "<attributeName>", "<fieldPredicate>": ["<valueString>"]}, {"field": "<attributeName>", "<fieldPredicate>": ["<valueString>"]}]
 ```
@@ -133,7 +135,7 @@ http://localhost:3000/chartgen.html?x=orange,pear,strawberry,apple&y=1,2,3,4&cha
 
 * Server side script
 ``` javascript
-const ChartGenerator = require('./lib/chartgen');
+import ChartGenerator from './lib/chartgen.mjs';
 
 let data = {"charttype":"areachart", "x": ["orange","pear"], "y": [1,2]} // will be formatted inside generatechart function
 let chartgen = new ChartGenerator(data);
@@ -180,16 +182,17 @@ The `title`, `labels` (depending on chart type) and `colors` are available to al
 
 * `colors` - HTML color names, Hex or RGB values (only multivalued parameter separated by __;__). Number of colors must conform with respective `z` dimension 
 * `title`, `xlabels`, `ylabel`, `zlabels`, `wlabel` - string
+* `background` - HTML color names, Hex or RGB values (only multivalued parameter separated by __;__).
+* `sort`, `svg`, `base64` - true or false
+
 
 # TODO
 
 * Extra parameters:
 
-sort - true or false (default false)  
 interpolation - single categoric (line and area charts - recover list from documentation)  
 inner - single number ranged from 0 - height \* 0.9 - _(default 0, pie chart)_ 
-padding -single number ranged from 0 - 1 - _(default 0, pie chart)_  
-background - background color (default #FFFFFF)
+padding -single number ranged from 0 - 1 - _(default 0, pie chart)_
 fontsize - font size for title, labels and legends (default 20) 
 
 * POST requests

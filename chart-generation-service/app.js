@@ -1,15 +1,25 @@
-const web_server = require('express')();
-const path = require("path");
-const Busboy = require('busboy');
+import express from 'express';
+const web_server = express();
+
+// const path = require("path");
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// const Busboy = require('busboy');
+import Busboy from 'busboy';
+// const ChartGenerator = require('./lib/chartgen');
+import ChartGenerator from './lib/chartgen.mjs';
+// const bodyParser = require('body-parser');
+import bodyParser from 'body-parser'; //middleware for parsing POST requisitions
+// const d3 = require("d3");
+import * as d3 from 'd3';
+// const fs = require('fs');
+import fs from 'fs';
+
 const pages_path = __dirname + '/html';
-const ChartGenerator = require('./lib/chartgen');
-const bodyParser = require('body-parser'); //middleware for parsing POST requisitions
-const d3 = require("d3");
-const fs = require('fs');
-
-// wget -O/dev/null -i lists/links_5000.txt
-// node app.js --max-old-space-size=70000 > outputs_evaluation/list_5000.txt
-
 let req_list = [];
 let  datasets = {};
 const web_port = 3000;
@@ -22,9 +32,9 @@ web_server.use(bodyParser.urlencoded({     // to support URL-encoded bodies
 }));
 
 function logging(r){
-    console.log("start: " + (+ new Date()))
-    req_list.push("start: " + (+ new Date()))
-    req_list.push(r);
+    // console.log("start: " + (+ new Date()))
+    // req_list.push("start: " + (+ new Date()))
+    // req_list.push(r);
 }
 
 function IsJsonString(str) {
@@ -72,8 +82,8 @@ function sendVis(req, res, base64string){
     if (!req.headers['user-agent'].includes("Unity"))
 		if (!req.query.svg) {
             if (!req.query.base64) {
-                console.log("<title> Generated Chart </title>" +
-                "<img src='data:image/png;base64," + base64string + "' alt='generated chart'/>");
+                // console.log("<title> Generated Chart </title>" +
+                // "<img src='data:image/png;base64," + base64string + "' alt='generated chart'/>");
                 res.send("<title> Generated Chart </title>" +
                     "<img src='data:image/png;base64," + base64string + "' alt='generated chart'/>");
             }
@@ -84,7 +94,7 @@ function sendVis(req, res, base64string){
     else {
         res.send(base64string);
     }
-    console.log("finish: " + (+ new Date()));
+    // console.log("finish: " + (+ new Date()));
 }
 
 function sendVisImg(res, base64string){
@@ -164,7 +174,7 @@ web_server.get('/', function (req, res) {
 
 web_server.get('/debug.txt', function (req, res) {
     logging(req.originalUrl);
-    res.send(req_list.join("</br>"));
+    // res.send(req_list.join("</br>"));
 });
 
 // Serving webpages
@@ -256,6 +266,38 @@ web_server.get("/attributes/:dataset/", (req, res) => {
         datasets[dataset_name] = d3.csvParse(data_raw);
         data = datasets[dataset_name];
         res.send(Object.keys(data[0]).join(","));
+    });
+    
+});
+
+web_server.get("/metadata/:dataset/", (req, res) => {
+    // logging(req.originalUrl);
+
+    let dataset_name = req.params.dataset;
+    let filepath = "datasets/" + dataset_name + ".csv";
+    let data = {};
+    let metadata = {};
+
+    fs.readFile(filepath, "utf8", (err, data_raw) => {
+        datasets[dataset_name] = d3.csvParse(data_raw, d3.autoType);
+        data = datasets[dataset_name];
+        let columns = Object.keys(data[0]);
+        let rows = data.length;
+        // let meta = {};
+        // for (let k of columns) {
+        //     // console.log(isNaN(data[0][k]));
+        //     meta[k] = !isNaN(data[0][k]) ?
+        //         {"type": "numeric", "extent": d3.extent(data, d => d[k])} :
+        //         {"type": "categorical", "range": [...new Set(data.map(d => d[k]))]};
+        // }
+        let meta = [];
+        for (let k of columns) {
+            // console.log(isNaN(data[0][k]));
+            meta.push(!isNaN(data[0][k]) ?
+                {"name": k,"type": "numeric", "extent": d3.extent(data, d => d[k])} :
+                {"name": k, "type": "categorical", "extent": [...new Set(data.map(d => d[k]))]});
+        }
+        res.send({"columns": columns, "rows": rows, "meta": meta});
     });
     
 });
