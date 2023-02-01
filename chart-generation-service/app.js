@@ -277,6 +277,11 @@ web_server.get("/metadata/:dataset/", (req, res) => {
     let filepath = "datasets/" + dataset_name + ".csv";
     let data = {};
     let metadata = {};
+	
+	if(!fs.existsSync(filepath)){
+		res.send("File not found!");
+        return;
+    }
 
     fs.readFile(filepath, "utf8", (err, data_raw) => {
         datasets[dataset_name] = d3.csvParse(data_raw, d3.autoType);
