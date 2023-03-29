@@ -107,7 +107,7 @@ export default class ChartGenerator {
         }
         vlspec.title = {"text": this.settings["title"], "fontSize": 20};
         // console.log(this.settings)
-        if (!_.isEmpty(this.settings.columns) && !["parallel_coordinates"].includes(this.chartType)){
+        if (!_.isEmpty(this.settings.columns) && !["parallel_coordinates", "piechart"].includes(this.chartType)){
             vlspec.data.values = this.settings.data;
             for (let i = 0 ; i < this.data.length ; i++)
                 vlspec.data.values[i].index = i;
@@ -141,7 +141,7 @@ export default class ChartGenerator {
         else if (!_.isEmpty(this.settings.fold) && this.chartType === "parallel_coordinates"){
             vlspec.data.values = this.settings.data.map(d => {
                 for (let k in d) {
-                    if (this.settings.fold.includes(k)){
+                    if (this.settings.fold.includes(k)) {
                         d[k] = +d[k]
                     }
                 }
@@ -153,16 +153,21 @@ export default class ChartGenerator {
             vlspec.data.values = this.data;
         }
 
-        if (this.settings.filter && this.settings.filter !== "")
-            vlspec.transform = this.settings.filter.map(d => { return {"filter": d} });
-        
+        if (this.settings.filter && this.settings.filter !== "") {
+            if (this.settings.filter > 0) {
+                vlspec.transform = this.settings.filter.map(d => { return {"filter": d} })
+                console.log("aa", vlspec.transform[0]);
+            }
+            else {
+                vlspec.transform = this.settings.filter.map(d => { return {"filter": d} });
+            }
+        }
         vlspec.config.axis.titleFontSize = 12;
         vlspec.config.axis.labelFontSize = 12;
         vlspec.config.legend.titleFontSize = 12;
         vlspec.config.legend.labelFontSize = 12;
         
         // http://localhost:3000/generate/iris/chartgen.html?chart=parallel_coordinates&fold=sepal_length;sepal_width;petal_width;petal_length&z=iris&title=Iris
-        
         if (!["parallel_coordinates","heatmap", "piechart"].includes(this.chartType) && _.isEmpty(this.settings.fold)){
             for (let axis of ["x", "y"])
                 if (vlspec.encoding[axis])
@@ -183,7 +188,6 @@ export default class ChartGenerator {
                 if (vlspec.encoding[vlaxis[i]])
                     vlspec.encoding[vlaxis[i]].title = this.settings[extradim[i]+"label"];
         
-
             if (this.settings["colors"]){
                 // single color encondings
                 if (this.chartType === "barchartvertical") {
@@ -201,8 +205,12 @@ export default class ChartGenerator {
                 vlspec.encoding["color"] = {"aggregate": "count", "field": this.settings.columns.x, "type": "quantitative"};
             // http://localhost:3000/chartgen.html?x=orange,pear,pineapple,strawberry&y=1,2,3,4&chart=piechart&title=title    
             } else if (this.chartType === "piechart") { 
-                vlspec.encoding.theta.field = "y"; //this.settings["x"];
-                vlspec.encoding.color.field = "x"; //this.settings["colors"];
+                vlspec.data.values = this.settings.data;
+                // console.log(this.settings)
+                vlspec.encoding.theta.field = this.settings.columns["y"]; // "y"
+                vlspec.encoding.theta.aggregate = "count",
+                vlspec.encoding.theta.type = "quantitative";
+                vlspec.encoding.color.field = this.settings.columns["x"]; // "x"
             }
         }
         spec = vl.compile(vlspec).spec;

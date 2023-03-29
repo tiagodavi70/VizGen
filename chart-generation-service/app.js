@@ -142,8 +142,7 @@ function clean_get_url(req, dataset_mode=false){
     // specific configurations - numeric values
     for (let key of ["inner", "padding"] )
         if (url_query[key]) parameters[key] = +url_query[key];
-    
-    console.log(url_query["filter"])
+
     if (url_query["filter"])
         parameters["filter"] = JSON.parse(url_query["filter"].split(' ').join(''))
 
