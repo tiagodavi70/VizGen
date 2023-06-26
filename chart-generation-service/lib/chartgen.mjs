@@ -205,13 +205,18 @@ export default class ChartGenerator {
                 vlspec.encoding["color"] = {"aggregate": "count", "field": this.settings.columns.x, "type": "quantitative"};
             // http://localhost:3000/chartgen.html?x=orange,pear,pineapple,strawberry&y=1,2,3,4&chart=piechart&title=title    
             } else if (this.chartType === "piechart") { 
-                vlspec.data.values = this.settings.data;
-                // console.log(this.settings)
-                vlspec.encoding.theta.field = this.settings.columns["y"]; // "y"
-                vlspec.encoding.theta.aggregate = "count",
+                
+				vlspec.data.values = this.settings.columns["y"] != undefined ? this.settings.data : this.data;
+				vlspec.encoding.theta.field = this.settings.columns["y"] || "y"; // "y"
+                vlspec.encoding.theta.aggregate = "sum",
                 vlspec.encoding.theta.type = "quantitative";
-                vlspec.encoding.color.field = this.settings.columns["x"]; // "x"
-            }
+                vlspec.encoding.color.field = this.settings.columns["x"] || "x"; // "x"
+				vlspec.layer[1].encoding.text.field = vlspec.encoding.color.field;
+				vlspec.layer[1].encoding.theta = {"field": vlspec.encoding.theta.field, "type": "quantitative", "aggregate": "sum", "stack": true};
+
+				if (this.settings["sort"])
+					vlspec.encoding.order = {"field": vlspec.encoding.theta.field, "type": "quantitative", "sort": "descending"};
+			}
         }
         spec = vl.compile(vlspec).spec;
 
