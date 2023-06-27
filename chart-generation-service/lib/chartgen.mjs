@@ -206,50 +206,31 @@ export default class ChartGenerator {
             // http://localhost:3000/chartgen.html?x=orange,pear,pineapple,strawberry&y=1,2,3,4&chart=piechart&title=title    
             } else if (this.chartType === "piechart") { 
                 
-				vlspec.data.values = this.settings.columns["y"] != undefined ? this.settings.data : this.data;
-				vlspec.encoding.theta.field = this.settings.columns["y"] || "y"; // "y"
-                vlspec.encoding.theta.aggregate = "sum",
-                vlspec.encoding.theta.type = "quantitative";
-                vlspec.encoding.color.field = this.settings.columns["x"] || "x"; // "x"
-				vlspec.layer[1].encoding.text.field = vlspec.encoding.color.field;
-				vlspec.layer[1].encoding.theta = {"field": vlspec.encoding.theta.field, "type": "quantitative", "aggregate": "sum", "stack": true};
+				vlspec.data.values = this.settings.columns["x"] != undefined ? this.settings.data : this.data;
+				// console.log(this.settings)
+				
+				vlspec.layer[0].encoding = {theta: {"field": this.settings["y"], "type": "quantitative", "aggregate": "sum"}}; // "y"
+				vlspec.layer[0].encoding.theta.aggregate = "sum";
+				vlspec.layer[0].encoding.theta.type = "quantitative";
+                vlspec.layer[0].encoding.color = {field : this.settings.columns["x"] || "x"}; // "x"
+				if (this.settings.columns.x != undefined && this.settings.columns.y == undefined) {
+					vlspec.layer[0].encoding.theta.field = "y";
+					vlspec.layer[0].encoding.theta.aggregate = "count";
+					vlspec.data.values = vlspec.data.values.map(d => {
+						d.y = 1;
+						return d;
+					});
+				}
+				vlspec.layer[1].encoding.text = {"field": vlspec.layer[0].encoding.theta.field, "aggregate": "count"};
+				vlspec.layer[1].encoding.color = {"field": vlspec.layer[0].encoding.color.field, "type": "nominal"},
+				vlspec.layer[1].encoding.theta = {"field": vlspec.layer[0].encoding.theta.field, "type": "quantitative", "aggregate": "count", "stack": true};
 
 				if (this.settings["sort"])
-					vlspec.encoding.order = {"field": vlspec.encoding.theta.field, "type": "quantitative", "sort": "descending"};
+					vlspec.encoding.order = {"field": vlspec.layer[1].encoding.theta.field, "type": "quantitative", "sort": "descending"};
 			}
         }
         spec = vl.compile(vlspec).spec;
 
-        // let filter_transform = spec.data[1];
-
-        // if (!isvlspec) {
-        //     spec = await vega.loader().load(specfilepath);
-        //     spec = JSON.parse(spec);
-        //     //spec.data[0].values = this.settings.data;
-        //      console.log(this.settings.data[0])
-
-        //     this.settings.data.forEach(d => d.pie = 1)
-        //     if (!_.isEmpty(this.settings.columns)) {
-        //         spec.data[0] =
-        //         {   "name":"data_0",
-        //             "values": this.settings.data,
-        //             "transform":[{
-        //                 "type": "aggregate",
-        //                 "fields":["pie"],
-        //                 "groupby": [this.settings.columns["x"]],
-        //                 "ops": ["sum"],
-        //                 "as": ["sum"],
-        //         }]};
-        //         spec.data[1].transform[0].field = "sum";
-        //         spec.marks[0].encode.enter.fill.field = this.settings.columns["x"];
-        //         spec.scales[0].domain.field = this.settings.columns["x"];
-        //     }
-        //     filter_transform.transform.push(spec.data[0].transform[0]);
-        //     spec.data[0].transform = filter_transform.transform;
-
-        //     spec.title = this.settings["title"];
-        // }
-        // console.log(JSON.stringify(spec))
         return this.render(spec); // returns svg or base64 string for node, vega.view for web
     };
 

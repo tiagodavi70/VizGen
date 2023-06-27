@@ -21,6 +21,6 @@ The generated charts are exported in two non-interactive formats, PNG and SVG. T
 All servers modifications (unless it is a bug correction) must update the corresponding README, right now it's the most trustable specification outside the code. 
 
 # Credits and Contact
-* MSc. Tiago Davi Oliveira de Araújo - [email](mailto:tiagodavi70@gmail.com)
+* Tiago Davi Oliveira de Araújo - [email](mailto:tiagodavi70@gmail.com)
 * Vinicius Queiroz - [email](mailto:viniciusquei@hotmail.com)
 
