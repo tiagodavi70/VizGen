@@ -209,9 +209,9 @@ export default class ChartGenerator {
 				vlspec.data.values = this.settings.columns["x"] != undefined ? this.settings.data : this.data;
 				// console.log(this.settings)
 				
-				vlspec.layer[0].encoding = {theta: {"field": this.settings["y"], "type": "quantitative", "aggregate": "sum"}}; // "y"
-				vlspec.layer[0].encoding.theta.aggregate = "sum";
-				vlspec.layer[0].encoding.theta.type = "quantitative";
+				vlspec.layer[0].encoding = {theta: {"field": this.settings.columns["y"] || "y", "type": "quantitative", "aggregate": "sum"}}; // "y"
+				// vlspec.layer[0].encoding.theta.aggregate = "sum";
+				// vlspec.layer[0].encoding.theta.type = "quantitative";
                 vlspec.layer[0].encoding.color = {field : this.settings.columns["x"] || "x"}; // "x"
 				if (this.settings.columns.x != undefined && this.settings.columns.y == undefined) {
 					vlspec.layer[0].encoding.theta.field = "y";
@@ -221,14 +221,16 @@ export default class ChartGenerator {
 						return d;
 					});
 				}
-				vlspec.layer[1].encoding.text = {"field": vlspec.layer[0].encoding.theta.field, "aggregate": "count"};
+				console.log(this.settings)
+				vlspec.layer[1].encoding.text =  {"field": vlspec.layer[0].encoding.theta.field, "aggregate": "sum"};
 				vlspec.layer[1].encoding.color = {"field": vlspec.layer[0].encoding.color.field, "type": "nominal"},
-				vlspec.layer[1].encoding.theta = {"field": vlspec.layer[0].encoding.theta.field, "type": "quantitative", "aggregate": "count", "stack": true};
+				vlspec.layer[1].encoding.theta = {"field": vlspec.layer[0].encoding.theta.field, "type": "quantitative", "aggregate": "sum", "stack": true};
 
 				if (this.settings["sort"])
 					vlspec.encoding.order = {"field": vlspec.layer[1].encoding.theta.field, "type": "quantitative", "sort": "descending"};
 			}
         }
+		// console.log(JSON.stringify(vlspec))
         spec = vl.compile(vlspec).spec;
 
         return this.render(spec); // returns svg or base64 string for node, vega.view for web
